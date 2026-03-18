@@ -117,7 +117,7 @@
  <div class="option-group">
  <label>Jewellery Option</label>
  <div class="radio-options">
- <label class="radio-label"><input type="radio" name="jewellery" value="silver-cap"> With Silver Capping @ ?1,500</label>
+ <label class="radio-label"><input type="radio" name="jewellery" value="silver-cap"> With Silver Capping @ ₹1,500</label>
  <label class="radio-label"><input type="radio" name="jewellery" value="loose" checked> Loose Bead</label>
  </div>
  </div>
@@ -229,14 +229,30 @@
  <script src="cart.js"></script>
  <script src="script.js"></script>
  <script>
- function changeQty(delta) {
- const input = document.getElementById('qty-input');
- let val = parseInt(input.value) + delta;
- if (val < 1) val = 1;
- input.value = val;
- document.querySelector('.total-amount strong').textContent = '₹' + (2800 * val).toLocaleString('en-IN');
+ function getJewelleryAddon() {
+  const sel = document.querySelector('input[name="jewellery"]:checked');
+  if (!sel) return 0;
+  if (sel.value === 'silver-chain') return 2500;
+  if (sel.value === 'silver-cap') return 1500;
+  return 0;
  }
- function addToCart() { const qty = parseInt(document.getElementById('qty-input').value) || 1; addToCartGlobal('Do Mukhi Rudraksha (Plain)', 2800, qty, 'images/do-mukhi-plain.png'); }
+ function updateTotal() {
+  const qty = parseInt(document.getElementById('qty-input').value) || 1;
+  const total = (2800 + getJewelleryAddon()) * qty;
+  document.querySelector('.total-amount strong').textContent = '₹' + total.toLocaleString('en-IN');
+ }
+ function changeQty(delta) {
+  const input = document.getElementById('qty-input');
+  let val = parseInt(input.value) + delta;
+  if (val < 1) val = 1;
+  input.value = val;
+  updateTotal();
+ }
+ document.querySelectorAll('input[name="jewellery"]').forEach(function(r) { r.addEventListener('change', updateTotal); });
+ function addToCart() {
+  const qty = parseInt(document.getElementById('qty-input').value) || 1;
+  addToCartGlobal('Do Mukhi Rudraksha (Plain)', 2800 + getJewelleryAddon(), qty, 'images/do-mukhi-plain.png');
+ }
  </script>
 </body>
 </html>
