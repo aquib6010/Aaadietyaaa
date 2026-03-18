@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
  <meta charset="UTF-8">
@@ -274,43 +274,47 @@
  <div class="checkout-card">
  <div class="checkout-card-header">
  <h2>💳 Payment</h2>
- <p>Scan the QR code to pay via UPI, then upload the payment screenshot</p>
+ <p>Pay the exact order amount using UPI — choose your preferred method below</p>
  </div>
  <div class="checkout-card-body">
  <div class="payment-section">
- <div class="payment-info">
- <p>📱 Scan the QR code below using any UPI app (Google Pay, PhonePe, Paytm, etc.)</p>
- </div>
- <div class="payment-amount-display" id="payment-amount">₹0</div>
 
+ <!-- Order Amount Display -->
+ <div style="text-align:center;margin-bottom:24px;">
+  <p style="font-size:14px;color:#888;margin:0 0 6px;">Amount to Pay</p>
+  <div class="payment-amount-display" id="payment-amount" style="font-size:36px;font-weight:800;color:#E8570E;">₹0</div>
+ </div>
+
+ <!-- UPI App Buttons -->
+ <div style="margin-bottom:28px;">
+  <h3 style="font-size:16px;color:#1a1a2e;margin:0 0 16px;text-align:center;">Pay Instantly via UPI App</h3>
+  <p style="font-size:13px;color:#888;text-align:center;margin:0 0 16px;">Clicking a button will open the app with the exact amount pre-filled</p>
+  <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;">
+   <button onclick="payWithUPI('gpay')" style="flex:1;min-width:140px;max-width:200px;padding:14px 8px;background:linear-gradient(135deg,#4285F4,#34A853);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 15px rgba(66,133,244,0.3);transition:all .3s;">
+    <span style="font-size:20px;">G</span> Google Pay
+   </button>
+   <button onclick="payWithUPI('phonepe')" style="flex:1;min-width:140px;max-width:200px;padding:14px 8px;background:linear-gradient(135deg,#5F259F,#8B5CF6);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 15px rgba(95,37,159,0.3);transition:all .3s;">
+    <span style="font-size:20px;">P</span> PhonePe
+   </button>
+   <button onclick="payWithUPI('paytm')" style="flex:1;min-width:140px;max-width:200px;padding:14px 8px;background:linear-gradient(135deg,#00B9F5,#002970);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 15px rgba(0,185,245,0.3);transition:all .3s;">
+    <span style="font-size:20px;">₹</span> Paytm
+   </button>
+   <button onclick="payWithUPI('any')" style="flex:1;min-width:140px;max-width:200px;padding:14px 8px;background:linear-gradient(135deg,#E8570E,#FF8C42);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 15px rgba(232,87,14,0.3);transition:all .3s;">
+    <span style="font-size:20px;">📱</span> Any UPI App
+   </button>
+  </div>
+ </div>
+
+ <div style="text-align:center;color:#aaa;font-size:13px;margin:0 0 20px;">— OR scan QR code with exact amount —</div>
+
+ <!-- Dynamic QR Code (amount locked) -->
  <div class="qr-wrapper">
- <img src="images/Screenshot 2026-03-18 171415.png" alt="UPI Payment QR Code" id="qr-image">
- <div class="qr-label">Scan to Pay via UPI</div>
- <button onclick="downloadQR()" style="margin-top:10px;padding:10px 24px;background:linear-gradient(135deg,#E8570E,#FF8C42);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">⬇️ Download QR Code</button>
+  <img id="qr-image" alt="UPI Payment QR Code" style="max-width:250px;border-radius:12px;border:2px solid #eee;">
+  <div class="qr-label">Scan to Pay — amount is pre-filled</div>
+  <button onclick="downloadQR()" style="margin-top:10px;padding:10px 24px;background:linear-gradient(135deg,#E8570E,#FF8C42);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">⬇️ Download QR Code</button>
  </div>
 
- <!-- UPI Payment Details -->
- <div style="margin-top:24px;text-align:left;background:#f8f9fa;border-radius:12px;padding:20px;border:2px solid #e8e8e8;">
- <h3 style="font-size:16px;color:#1a1a2e;margin:0 0 12px;text-align:center;">📱 Pay via UPI / Bank Transfer</h3>
- <div style="display:flex;flex-direction:column;gap:10px;">
- <div style="display:flex;justify-content:space-between;align-items:center;background:#fff;padding:12px 16px;border-radius:8px;border:1px solid #e8e8e8;">
- <div><span style="font-size:13px;color:#888;">PhonePe</span><br><strong style="font-size:15px;color:#1a1a2e;">9839117339</strong></div>
- <button onclick="copyText('9839117339')" style="background:none;border:2px solid #E8570E;color:#E8570E;padding:6px 14px;border-radius:6px;cursor:pointer;font-weight:600;font-size:13px;">📋 Copy</button>
- </div>
- <div style="display:flex;justify-content:space-between;align-items:center;background:#fff;padding:12px 16px;border-radius:8px;border:1px solid #e8e8e8;">
- <div><span style="font-size:13px;color:#888;">Google Pay</span><br><strong style="font-size:15px;color:#1a1a2e;">9336344500</strong></div>
- <button onclick="copyText('9336344500')" style="background:none;border:2px solid #E8570E;color:#E8570E;padding:6px 14px;border-radius:6px;cursor:pointer;font-weight:600;font-size:13px;">📋 Copy</button>
- </div>
- <div style="display:flex;justify-content:space-between;align-items:center;background:#fff;padding:12px 16px;border-radius:8px;border:1px solid #e8e8e8;">
- <div><span style="font-size:13px;color:#888;">UPI ID</span><br><strong style="font-size:15px;color:#1a1a2e;">dr.aaadietya@axisbank</strong></div>
- <button onclick="copyText('dr.aaadietya@axisbank')" style="background:none;border:2px solid #E8570E;color:#E8570E;padding:6px 14px;border-radius:6px;cursor:pointer;font-weight:600;font-size:13px;">📋 Copy</button>
- </div>
- <div style="display:flex;justify-content:space-between;align-items:center;background:#fff;padding:12px 16px;border-radius:8px;border:1px solid #e8e8e8;">
- <div><span style="font-size:13px;color:#888;">Paytm</span><br><strong style="font-size:15px;color:#1a1a2e;">9839117339</strong></div>
- <button onclick="copyText('9839117339')" style="background:none;border:2px solid #E8570E;color:#E8570E;padding:6px 14px;border-radius:6px;cursor:pointer;font-weight:600;font-size:13px;">📋 Copy</button>
- </div>
- </div>
- </div>
+
  </div>
 
  <!-- Screenshot Upload -->
@@ -447,13 +451,56 @@
  <div class="order-item-name">${item.name}</div>
  <div class="order-item-qty">Qty: ${item.qty}</div>
  </div>
- <div class="order-item-price">?${(item.price * item.qty).toLocaleString('en-IN')}</div>
+ <div class="order-item-price">₹${(item.price * item.qty).toLocaleString('en-IN')}</div>
  </div>
  `).join('');
 
  const total = getCartTotal();
  totalEl.textContent = '₹' + total.toLocaleString('en-IN');
  paymentAmount.textContent = '₹' + total.toLocaleString('en-IN');
+
+ // Update exact amount display
+ const exactAmtEl = document.getElementById('upi-exact-amount');
+ if (exactAmtEl) exactAmtEl.textContent = total.toLocaleString('en-IN');
+
+ // Generate dynamic QR code with amount locked
+ generateUpiQR(total);
+ }
+
+ // UPI configuration
+ const UPI_ID = 'dr.aaadietya@axisbank';
+ const UPI_NAME = 'AAADIETYA';
+
+ // Generate UPI deep link
+ function getUpiLink(amount) {
+ const orderId = 'AAD' + Date.now().toString().slice(-8);
+ return `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(UPI_NAME)}&am=${amount}&cu=INR&tn=${encodeURIComponent('Order ' + orderId + ' - AAADIETYA.com')}`;
+ }
+
+ // Generate dynamic QR code with exact amount
+ function generateUpiQR(amount) {
+ const upiLink = getUpiLink(amount);
+ const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(upiLink)}`;
+ const qrImg = document.getElementById('qr-image');
+ if (qrImg) qrImg.src = qrUrl;
+ }
+
+ // Pay with specific UPI app (opens deep link on mobile)
+ function payWithUPI(app) {
+ const total = getCartTotal();
+ if (total <= 0) {
+  showCheckoutToast('Your cart is empty!', 'error');
+  return;
+ }
+ const upiLink = getUpiLink(total);
+
+ // Try to open the UPI deep link
+ window.location.href = upiLink;
+
+ // Show helpful message after a short delay
+ setTimeout(function() {
+  showCheckoutToast('If the app did not open, scan the QR code below or use the UPI ID to pay ₹' + total.toLocaleString('en-IN'), 'info');
+ }, 2000);
  }
 
  // Step Navigation
