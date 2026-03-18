@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Sitemap: https://aaadietya.com/sitemap.xml
+
+# Disallow admin/system files
+Disallow: /checkout.html
+Disallow: /*.js$
+Disallow: /*.css$

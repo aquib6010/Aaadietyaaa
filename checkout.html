@@ -1,0 +1,677 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Checkout - Complete your order at AAADIETYA.com">
+  <title>Checkout | AAADIETYA.com</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛒</text></svg>">
+  <style>
+    /* ========== CHECKOUT STYLES ========== */
+    .checkout-page { min-height: 80vh; padding: 2rem 0; background: #f8f9fa; }
+    .checkout-container { max-width: 900px; margin: 0 auto; padding: 0 1rem; }
+
+    /* Progress Steps */
+    .checkout-progress { display: flex; justify-content: center; align-items: center; margin-bottom: 2.5rem; gap: 0; }
+    .progress-step { display: flex; align-items: center; gap: 10px; padding: 10px 20px; position: relative; }
+    .step-number { width: 38px; height: 38px; border-radius: 50%; background: #ddd; color: #888; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; transition: all 0.3s ease; border: 3px solid transparent; }
+    .step-label { font-size: 14px; font-weight: 600; color: #888; transition: color 0.3s ease; }
+    .progress-step.active .step-number { background: linear-gradient(135deg, #E8570E, #FF8C42); color: #fff; border-color: rgba(232,87,14,0.3); box-shadow: 0 3px 15px rgba(232,87,14,0.3); }
+    .progress-step.active .step-label { color: #1a1a2e; }
+    .progress-step.completed .step-number { background: #16A34A; color: #fff; border-color: rgba(22,163,74,0.3); }
+    .progress-step.completed .step-label { color: #16A34A; }
+    .progress-connector { width: 50px; height: 3px; background: #ddd; border-radius: 3px; transition: background 0.3s ease; }
+    .progress-connector.active { background: #16A34A; }
+
+    /* Checkout Card */
+    .checkout-card { background: #fff; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden; }
+    .checkout-card-header { background: linear-gradient(135deg, #1a1a2e, #16213e); color: #fff; padding: 20px 28px; }
+    .checkout-card-header h2 { margin: 0; font-size: 20px; font-weight: 700; }
+    .checkout-card-header p { margin: 4px 0 0; font-size: 13px; color: rgba(255,255,255,0.7); }
+    .checkout-card-body { padding: 28px; }
+
+    /* Order Summary */
+    .order-summary { margin-bottom: 2rem; }
+    .order-summary h3 { font-size: 17px; color: #1a1a2e; margin: 0 0 1rem; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; }
+    .order-item { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid #f5f5f5; }
+    .order-item:last-child { border-bottom: none; }
+    .order-item-img { width: 56px; height: 56px; border-radius: 10px; overflow: hidden; background: #f8f8f8; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .order-item-img img { width: 100%; height: 100%; object-fit: cover; }
+    .order-item-img .placeholder-emoji { font-size: 28px; }
+    .order-item-details { flex: 1; }
+    .order-item-name { font-weight: 600; font-size: 14px; color: #1a1a2e; margin: 0; }
+    .order-item-qty { font-size: 12px; color: #888; margin-top: 2px; }
+    .order-item-price { font-weight: 700; font-size: 15px; color: #E8570E; white-space: nowrap; }
+    .order-total-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0 0; border-top: 2px solid #1a1a2e; margin-top: 10px; }
+    .order-total-label { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+    .order-total-amount { font-size: 22px; font-weight: 800; color: #E8570E; }
+
+    /* Form Styles */
+    .checkout-form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full-width { grid-column: 1 / -1; }
+    .form-group label { font-size: 13px; font-weight: 600; color: #333; }
+    .form-group label .required { color: #e74c3c; }
+    .form-group input, .form-group textarea, .form-group select {
+      padding: 12px 14px; border: 2px solid #e8e8e8; border-radius: 10px; font-size: 14px;
+      font-family: inherit; transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      background: #fafafa; outline: none;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      border-color: #E8570E; box-shadow: 0 0 0 3px rgba(232,87,14,0.1); background: #fff;
+    }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+
+    /* Action Buttons */
+    .checkout-actions { display: flex; gap: 12px; margin-top: 24px; justify-content: space-between; }
+    .btn-back { padding: 14px 28px; border: 2px solid #ddd; background: #fff; color: #555; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-family: inherit; }
+    .btn-back:hover { border-color: #999; color: #333; }
+    .btn-next { padding: 14px 36px; background: linear-gradient(135deg, #E8570E, #FF8C42); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; font-family: inherit; box-shadow: 0 4px 15px rgba(232,87,14,0.3); }
+    .btn-next:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(232,87,14,0.4); }
+    .btn-next:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    /* Payment Section */
+    .payment-section { text-align: center; }
+    .payment-info { background: linear-gradient(135deg, #fffbeb, #fef3c7); border: 2px solid #fbbf24; border-radius: 12px; padding: 16px; margin-bottom: 24px; }
+    .payment-info p { margin: 0; font-size: 14px; color: #92400e; font-weight: 500; }
+    .payment-amount-display { font-size: 32px; font-weight: 800; color: #E8570E; margin: 10px 0; }
+    .qr-wrapper { display: inline-block; background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin: 20px 0; border: 2px solid #f0f0f0; }
+    .qr-wrapper img { width: 260px; height: 260px; object-fit: contain; border-radius: 8px; }
+    .qr-label { font-size: 14px; color: #555; margin-top: 10px; font-weight: 600; }
+
+    /* Screenshot Upload */
+    .upload-section { margin-top: 28px; text-align: left; }
+    .upload-section h3 { font-size: 17px; color: #1a1a2e; margin: 0 0 12px; }
+    .upload-area { border: 3px dashed #ddd; border-radius: 14px; padding: 30px; text-align: center; cursor: pointer; transition: all 0.3s ease; background: #fafafa; position: relative; }
+    .upload-area:hover { border-color: #E8570E; background: #fff8f5; }
+    .upload-area.has-file { border-color: #16A34A; background: #f0fdf4; }
+    .upload-icon { font-size: 42px; margin-bottom: 8px; }
+    .upload-text { font-size: 15px; color: #555; font-weight: 500; }
+    .upload-hint { font-size: 12px; color: #999; margin-top: 6px; }
+    .upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .upload-preview { margin-top: 16px; display: none; }
+    .upload-preview.visible { display: block; }
+    .upload-preview img { max-width: 200px; max-height: 150px; border-radius: 10px; border: 2px solid #16A34A; box-shadow: 0 3px 12px rgba(0,0,0,0.1); }
+    .upload-filename { font-size: 13px; color: #16A34A; font-weight: 600; margin-top: 8px; }
+
+    /* Success Section */
+    .success-section { text-align: center; padding: 40px 20px; }
+    .success-icon { font-size: 72px; margin-bottom: 16px; animation: successBounce 0.6s ease; }
+    @keyframes successBounce { 0% { transform: scale(0); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
+    .success-title { font-size: 28px; font-weight: 800; color: #16A34A; margin: 0 0 10px; }
+    .success-subtitle { font-size: 16px; color: #555; margin: 0 0 24px; line-height: 1.6; }
+    .success-order-id { background: #f0fdf4; border: 2px solid #bbf7d0; border-radius: 10px; padding: 14px 20px; display: inline-block; margin-bottom: 24px; }
+    .success-order-id span { font-size: 13px; color: #888; }
+    .success-order-id strong { font-size: 18px; color: #1a1a2e; display: block; margin-top: 4px; }
+    .btn-continue-shopping { padding: 16px 40px; background: linear-gradient(135deg, #E8570E, #FF8C42); color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: inline-block; box-shadow: 0 4px 15px rgba(232,87,14,0.3); }
+    .btn-continue-shopping:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(232,87,14,0.4); }
+
+    /* Hidden step sections */
+    .checkout-step { display: none; }
+    .checkout-step.active { display: block; }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .checkout-form { grid-template-columns: 1fr; }
+      .checkout-actions { flex-direction: column; }
+      .progress-step { padding: 8px 10px; }
+      .step-label { font-size: 12px; }
+      .progress-connector { width: 30px; }
+      .qr-wrapper img { width: 200px; height: 200px; }
+    }
+
+    /* Submitting state */
+    .btn-next.submitting { pointer-events: none; position: relative; }
+    .btn-next.submitting::after { content: ''; width: 18px; height: 18px; border: 3px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; display: inline-block; margin-left: 10px; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <!-- ANNOUNCEMENT BAR -->
+  <div class="announcement-bar"><div class="announcement-text">
+    <span>🌟 Free Consultation on orders above ₹2,100 | Use Code: ASTRO21 🌟</span>
+    <span>📿 Certified Gemstones & Rudraksha — Lab Tested & Energized 📿</span>
+  </div></div>
+
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <div class="container">
+      <a href="index.html" class="logo"><div class="logo-text"><span class="a-letter">A</span>AADIETYA<span class="dot-com">.com</span></div></a>
+      <div class="search-bar">
+        <input type="text" placeholder="Search gemstones, rudraksha, yantras..." id="search-input">
+        <button class="search-btn" aria-label="Search">🔍</button>
+      </div>
+      <div class="header-actions">
+        <a href="#" class="header-action" id="cart-btn"><span class="action-icon">🛒</span><span class="action-label">Cart</span><span class="cart-badge">0</span></a>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVIGATION -->
+  <nav class="main-nav" id="main-nav">
+    <div class="container">
+      <ul class="nav-list">
+        <li class="nav-item"><a href="rudraksha.html" class="nav-link">Rudraksha</a></li>
+        <li class="nav-item"><a href="raksha-kavach.html" class="nav-link">Raksha Kavach</a></li>
+        <li class="nav-item"><a href="bhojpatra-yantra.html" class="nav-link">Bhojpatra Yantra</a></li>
+        <li class="nav-item"><a href="rudraksha-mala.html" class="nav-link">Rudraksha Mala</a></li>
+        <li class="nav-item"><a href="consultation.html" class="nav-link">Consultation</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb-bar">
+    <div class="container">
+      <a href="index.html">Home</a> <span>›</span>
+      <span class="current">Checkout</span>
+    </div>
+  </div>
+
+  <!-- ========== CHECKOUT PAGE ========== -->
+  <section class="checkout-page">
+    <div class="checkout-container">
+
+      <!-- Progress Steps -->
+      <div class="checkout-progress">
+        <div class="progress-step active" id="prog-1">
+          <span class="step-number">1</span>
+          <span class="step-label">Details</span>
+        </div>
+        <div class="progress-connector" id="conn-1"></div>
+        <div class="progress-step" id="prog-2">
+          <span class="step-number">2</span>
+          <span class="step-label">Payment</span>
+        </div>
+        <div class="progress-connector" id="conn-2"></div>
+        <div class="progress-step" id="prog-3">
+          <span class="step-number">3</span>
+          <span class="step-label">Confirmation</span>
+        </div>
+      </div>
+
+      <!-- ===== STEP 1: Order Summary + Details ===== -->
+      <div class="checkout-step active" id="step-1">
+        <div class="checkout-card">
+          <div class="checkout-card-header">
+            <h2>📋 Order Summary & Your Details</h2>
+            <p>Review your order and enter shipping information</p>
+          </div>
+          <div class="checkout-card-body">
+            <!-- Order Summary -->
+            <div class="order-summary" id="order-summary">
+              <h3>🛒 Your Order</h3>
+              <div id="order-items">
+                <!-- Filled by JS -->
+              </div>
+              <div class="order-total-row">
+                <span class="order-total-label">Total Amount</span>
+                <span class="order-total-amount" id="order-total">₹0</span>
+              </div>
+            </div>
+
+            <!-- User Details Form -->
+            <h3 style="font-size:17px;color:#1a1a2e;margin:0 0 1rem;border-bottom:2px solid #f0f0f0;padding-bottom:10px;">📝 Shipping Details</h3>
+            <div class="checkout-form" id="checkout-form">
+              <div class="form-group">
+                <label>Full Name <span class="required">*</span></label>
+                <input type="text" id="cust-name" placeholder="Enter your full name" required>
+              </div>
+              <div class="form-group">
+                <label>Phone Number <span class="required">*</span></label>
+                <input type="tel" id="cust-phone" placeholder="+91 XXXXX XXXXX" required>
+              </div>
+              <div class="form-group full-width">
+                <label>Email Address <span class="required">*</span></label>
+                <input type="email" id="cust-email" placeholder="your.email@example.com" required>
+              </div>
+              <div class="form-group full-width">
+                <label>Shipping Address <span class="required">*</span></label>
+                <textarea id="cust-address" placeholder="House/Flat No., Street, Locality..." required></textarea>
+              </div>
+              <div class="form-group">
+                <label>City <span class="required">*</span></label>
+                <input type="text" id="cust-city" placeholder="City" required>
+              </div>
+              <div class="form-group">
+                <label>State <span class="required">*</span></label>
+                <select id="cust-state" required>
+                  <option value="">Select State</option>
+                  <option>Andhra Pradesh</option><option>Arunachal Pradesh</option>
+                  <option>Assam</option><option>Bihar</option><option>Chhattisgarh</option>
+                  <option>Goa</option><option>Gujarat</option><option>Haryana</option>
+                  <option>Himachal Pradesh</option><option>Jharkhand</option><option>Karnataka</option>
+                  <option>Kerala</option><option>Madhya Pradesh</option><option>Maharashtra</option>
+                  <option>Manipur</option><option>Meghalaya</option><option>Mizoram</option>
+                  <option>Nagaland</option><option>Odisha</option><option>Punjab</option>
+                  <option>Rajasthan</option><option>Sikkim</option><option>Tamil Nadu</option>
+                  <option>Telangana</option><option>Tripura</option><option>Uttar Pradesh</option>
+                  <option>Uttarakhand</option><option>West Bengal</option>
+                  <option>Delhi</option><option>Jammu & Kashmir</option><option>Ladakh</option>
+                  <option>Puducherry</option><option>Chandigarh</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Pincode <span class="required">*</span></label>
+                <input type="text" id="cust-pincode" placeholder="6 digit pincode" maxlength="6" pattern="[0-9]{6}" required>
+              </div>
+              <div class="form-group">
+                <label>Order Notes (Optional)</label>
+                <input type="text" id="cust-notes" placeholder="Any special instructions...">
+              </div>
+            </div>
+
+            <div class="checkout-actions">
+              <button class="btn-back" onclick="window.history.back()">← Back to Cart</button>
+              <button class="btn-next" onclick="goToStep2()">Proceed to Payment →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== STEP 2: QR Payment + Screenshot Upload ===== -->
+      <div class="checkout-step" id="step-2">
+        <div class="checkout-card">
+          <div class="checkout-card-header">
+            <h2>💳 Payment</h2>
+            <p>Scan the QR code to pay via UPI, then upload the payment screenshot</p>
+          </div>
+          <div class="checkout-card-body">
+            <div class="payment-section">
+              <div class="payment-info">
+                <p>💡 Scan the QR code below using any UPI app (Google Pay, PhonePe, Paytm, etc.)</p>
+              </div>
+              <div class="payment-amount-display" id="payment-amount">₹0</div>
+
+              <div class="qr-wrapper">
+                <img src="images/Screenshot 2026-03-18 171415.png" alt="UPI Payment QR Code" id="qr-image">
+                <div class="qr-label">Scan to Pay via UPI</div>
+              </div>
+            </div>
+
+            <!-- Screenshot Upload -->
+            <div class="upload-section">
+              <h3>📸 Upload Payment Screenshot</h3>
+              <p style="font-size:13px;color:#888;margin:0 0 12px;">After making the payment, take a screenshot and upload it below as proof of payment.</p>
+              <div class="upload-area" id="upload-area">
+                <div class="upload-icon">📤</div>
+                <div class="upload-text">Click or drag to upload screenshot</div>
+                <div class="upload-hint">Supports JPG, PNG, JPEG (Max 5MB)</div>
+                <input type="file" id="screenshot-input" accept="image/*">
+              </div>
+              <div class="upload-preview" id="upload-preview">
+                <img id="preview-img" alt="Payment screenshot preview">
+                <div class="upload-filename" id="upload-filename"></div>
+              </div>
+            </div>
+
+            <div class="checkout-actions">
+              <button class="btn-back" onclick="goToStep1()">← Back to Details</button>
+              <button class="btn-next" id="btn-place-order" onclick="placeOrder()" disabled>Place Order & Submit Payment Proof →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== STEP 3: Success ===== -->
+      <div class="checkout-step" id="step-3">
+        <div class="checkout-card">
+          <div class="checkout-card-body">
+            <div class="success-section">
+              <div class="success-icon">🎉</div>
+              <h2 class="success-title">Congratulations!</h2>
+              <p class="success-subtitle">Your order has been placed successfully!<br>We have received your payment screenshot and will verify it shortly.</p>
+              <div class="success-order-id">
+                <span>Order ID</span>
+                <strong id="order-id-display">AAD-000000</strong>
+              </div>
+              <p style="font-size:14px;color:#888;margin-bottom:24px;">A confirmation will be sent to your email. For any queries, contact us at<br><strong>+91-9839117339</strong> or <strong>anmoladitya2019@gmail.com</strong></p>
+              <a href="index.html" class="btn-continue-shopping">🛍️ Continue Shopping</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer" id="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="footer-logo">
+            <div class="logo-text">
+              <span class="a-letter">A</span>AADIETYA
+              <span class="dot-com">.com</span>
+            </div>
+          </div>
+          <p class="footer-about">An ISO 9001:2015 Certified Company providing world-class astrological consultation, genuine spiritual products & transformative guidance since 2001.</p>
+          <div class="footer-contact">
+            <p>📍 Shop No. 12, Radiance Town, 7/119 Swaroop Nagar, Kanpur - 208002</p>
+            <p>📞 <a href="tel:+919839117339" style="color:#ccc;">+91 983 911 7339</a></p>
+            <p>📱 <a href="tel:+919336344500" style="color:#ccc;">+91 933 634 4500</a></p>
+            <p>✉️ <a href="mailto:astrojyotishi@gmail.com" style="color:#ccc;">astrojyotishi@gmail.com</a></p>
+          </div>
+          <div class="social-links" style="margin-top:1rem;">
+            <a href="https://www.facebook.com/dr.aaadietya/" target="_blank" class="social-link" aria-label="Facebook" style="background:#3b5998;">f</a>
+            <a href="https://instagram.com/aaadietya" target="_blank" class="social-link" aria-label="Instagram" style="background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);">📷</a>
+            <a href="https://www.linkedin.com/in/aaadietya/" target="_blank" class="social-link" aria-label="LinkedIn" style="background:#0077b5;">in</a>
+            <a href="https://www.youtube.com/channel/UCxh0aF-1C6Q-BGHmEkTBoIQ" target="_blank" class="social-link" aria-label="YouTube" style="background:#c4302b;">▶</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h5>Astro Shop</h5>
+          <ul class="footer-links">
+            <li><a href="rudraksha.html">Rudraksha</a></li>
+            <li><a href="rudraksha-mala.html">Rudraksha Mala</a></li>
+            <li><a href="raksha-kavach.html">Raksha Kavach</a></li>
+            <li><a href="bhojpatra-yantra.html">Bhojpatra Yantra</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Information</h5>
+          <ul class="footer-links">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 AAADIETYA.com | All rights reserved | An ISO 9001:2015 Certified Company</p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" aria-label="Back to top">↑</button>
+  <script src="cart.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // ==================== Checkout Logic ====================
+
+    // Get cart data
+    function getCart() {
+      try { return JSON.parse(localStorage.getItem('aaadietya_cart')) || []; }
+      catch(e) { return []; }
+    }
+    function getCartTotal() {
+      return getCart().reduce((sum, item) => sum + (item.price * item.qty), 0);
+    }
+    function clearCart() {
+      localStorage.removeItem('aaadietya_cart');
+    }
+
+    // Render order summary on page load
+    function renderOrderSummary() {
+      const cart = getCart();
+      const container = document.getElementById('order-items');
+      const totalEl = document.getElementById('order-total');
+      const paymentAmount = document.getElementById('payment-amount');
+
+      if (cart.length === 0) {
+        container.innerHTML = '<p style="color:#999;text-align:center;padding:20px;">Your cart is empty. <a href="index.html" style="color:#E8570E;">Continue shopping</a></p>';
+        document.querySelectorAll('.btn-next').forEach(b => b.disabled = true);
+        return;
+      }
+
+      container.innerHTML = cart.map(item => `
+        <div class="order-item">
+          <div class="order-item-img">
+            ${item.image ? `<img src="${item.image}" alt="${item.name}">` : '<span class="placeholder-emoji">📿</span>'}
+          </div>
+          <div class="order-item-details">
+            <div class="order-item-name">${item.name}</div>
+            <div class="order-item-qty">Qty: ${item.qty}</div>
+          </div>
+          <div class="order-item-price">₹${(item.price * item.qty).toLocaleString('en-IN')}</div>
+        </div>
+      `).join('');
+
+      const total = getCartTotal();
+      totalEl.textContent = '₹' + total.toLocaleString('en-IN');
+      paymentAmount.textContent = '₹' + total.toLocaleString('en-IN');
+    }
+
+    // Step Navigation
+    function goToStep2() {
+      // Validate form
+      const fields = ['cust-name', 'cust-phone', 'cust-email', 'cust-address', 'cust-city', 'cust-state', 'cust-pincode'];
+      let valid = true;
+      fields.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) {
+          el.style.borderColor = '#e74c3c';
+          el.style.boxShadow = '0 0 0 3px rgba(231,76,60,0.1)';
+          valid = false;
+        } else {
+          el.style.borderColor = '#e8e8e8';
+          el.style.boxShadow = 'none';
+        }
+      });
+
+      // Validate email
+      const email = document.getElementById('cust-email').value;
+      if (email && !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+        document.getElementById('cust-email').style.borderColor = '#e74c3c';
+        valid = false;
+      }
+
+      // Validate pincode
+      const pincode = document.getElementById('cust-pincode').value;
+      if (pincode && !pincode.match(/^[0-9]{6}$/)) {
+        document.getElementById('cust-pincode').style.borderColor = '#e74c3c';
+        valid = false;
+      }
+
+      if (!valid) {
+        showCheckoutToast('Please fill all required fields correctly', 'error');
+        return;
+      }
+
+      // Show step 2
+      document.getElementById('step-1').classList.remove('active');
+      document.getElementById('step-2').classList.add('active');
+      updateProgress(2);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function goToStep1() {
+      document.getElementById('step-2').classList.remove('active');
+      document.getElementById('step-1').classList.add('active');
+      updateProgress(1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function updateProgress(step) {
+      // Reset all
+      for (let i = 1; i <= 3; i++) {
+        document.getElementById('prog-' + i).className = 'progress-step';
+      }
+      document.getElementById('conn-1').className = 'progress-connector';
+      document.getElementById('conn-2').className = 'progress-connector';
+
+      // Set active and completed
+      if (step >= 1) document.getElementById('prog-1').classList.add(step === 1 ? 'active' : 'completed');
+      if (step >= 2) { document.getElementById('prog-2').classList.add(step === 2 ? 'active' : 'completed'); document.getElementById('conn-1').classList.add('active'); }
+      if (step >= 3) { document.getElementById('prog-3').classList.add('active'); document.getElementById('conn-2').classList.add('active'); }
+    }
+
+    // Screenshot Upload
+    const uploadArea = document.getElementById('upload-area');
+    const screenshotInput = document.getElementById('screenshot-input');
+    const previewContainer = document.getElementById('upload-preview');
+    const previewImg = document.getElementById('preview-img');
+    const uploadFilename = document.getElementById('upload-filename');
+    const btnPlaceOrder = document.getElementById('btn-place-order');
+
+    screenshotInput.addEventListener('change', function() {
+      const file = this.files[0];
+      if (!file) return;
+
+      // Validate file
+      if (!file.type.startsWith('image/')) {
+        showCheckoutToast('Please upload an image file', 'error');
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        showCheckoutToast('File too large. Max 5MB allowed.', 'error');
+        return;
+      }
+
+      // Show preview
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        previewImg.src = e.target.result;
+        previewContainer.classList.add('visible');
+        uploadFilename.textContent = '✅ ' + file.name;
+        uploadArea.classList.add('has-file');
+        uploadArea.querySelector('.upload-text').textContent = 'Screenshot uploaded! Click to change.';
+        btnPlaceOrder.disabled = false;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Drag & drop
+    uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.style.borderColor = '#E8570E'; });
+    uploadArea.addEventListener('dragleave', () => { uploadArea.style.borderColor = ''; });
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.style.borderColor = '';
+      if (e.dataTransfer.files.length) {
+        screenshotInput.files = e.dataTransfer.files;
+        screenshotInput.dispatchEvent(new Event('change'));
+      }
+    });
+
+    // Place Order - Send email via FormSubmit.co (no API key needed)
+    async function placeOrder() {
+      const btn = document.getElementById('btn-place-order');
+      btn.classList.add('submitting');
+      btn.textContent = 'Submitting Order...';
+      btn.disabled = true;
+
+      const cart = getCart();
+      const orderId = 'AAD-' + Date.now().toString(36).toUpperCase();
+
+      // Build order details string
+      let orderDetails = cart.map(item =>
+        `${item.name} x${item.qty} = Rs.${(item.price * item.qty).toLocaleString('en-IN')}`
+      ).join('\n');
+      orderDetails += '\n\nTotal: Rs.' + getCartTotal().toLocaleString('en-IN');
+
+      // Customer info
+      const custName = document.getElementById('cust-name').value;
+      const custPhone = document.getElementById('cust-phone').value;
+      const custEmail = document.getElementById('cust-email').value;
+      const custAddress = document.getElementById('cust-address').value;
+      const custCity = document.getElementById('cust-city').value;
+      const custState = document.getElementById('cust-state').value;
+      const custPincode = document.getElementById('cust-pincode').value;
+      const custNotes = document.getElementById('cust-notes').value || 'None';
+
+      // Screenshot as base64 for email body
+      const screenshotFile = document.getElementById('screenshot-input').files[0];
+      let screenshotBase64 = '';
+      if (screenshotFile) {
+        screenshotBase64 = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = (e) => resolve(e.target.result);
+          reader.readAsDataURL(screenshotFile);
+        });
+      }
+
+      // Prepare form data for FormSubmit.co
+      const formData = new FormData();
+      formData.append('_subject', '🛒 New Order ' + orderId + ' - AAADIETYA.com');
+      formData.append('_template', 'table');
+      formData.append('_captcha', 'false');
+      formData.append('Order ID', orderId);
+      formData.append('Customer Name', custName);
+      formData.append('Phone', custPhone);
+      formData.append('Email', custEmail);
+      formData.append('Shipping Address', custAddress + ', ' + custCity + ', ' + custState + ' - ' + custPincode);
+      formData.append('Order Notes', custNotes);
+      formData.append('Order Details', orderDetails);
+
+      // Attach screenshot file
+      if (screenshotFile) {
+        formData.append('attachment', screenshotFile, 'payment-screenshot-' + orderId + '.' + screenshotFile.name.split('.').pop());
+      }
+
+      // Show success function
+      function showSuccess() {
+        document.getElementById('step-2').classList.remove('active');
+        document.getElementById('step-3').classList.add('active');
+        document.getElementById('order-id-display').textContent = orderId;
+        updateProgress(3);
+        clearCart();
+        document.querySelectorAll('.cart-badge').forEach(b => { b.textContent = '0'; });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      try {
+        // Send via FormSubmit.co (supports file attachments, no API key needed)
+        // NOTE: First time, FormSubmit will send a confirmation email to anmoladitya2019@gmail.com
+        // The recipient must click the confirmation link once, then all future emails go through automatically
+        const response = await fetch('https://formsubmit.co/ajax/anmoladitya2019@gmail.com', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          showSuccess();
+        } else {
+          throw new Error(result.message || 'Failed to submit');
+        }
+      } catch(err) {
+        console.error('FormSubmit error:', err);
+
+        // Fallback: Send order details via WhatsApp with all info
+        const waMsg = encodeURIComponent(
+          `🛒 *New Order: ${orderId}*\n\n` +
+          `*Customer:* ${custName}\n` +
+          `*Phone:* ${custPhone}\n` +
+          `*Email:* ${custEmail}\n` +
+          `*Address:* ${custAddress}, ${custCity}, ${custState} - ${custPincode}\n` +
+          `*Notes:* ${custNotes}\n\n` +
+          `*Order:*\n${orderDetails}\n\n` +
+          `_Payment screenshot uploaded with order._`
+        );
+        window.open(`https://wa.me/919839117339?text=${waMsg}`, '_blank');
+
+        // Still show success
+        showSuccess();
+      }
+
+      btn.classList.remove('submitting');
+      btn.textContent = 'Place Order & Submit Payment Proof →';
+    }
+
+    // Toast helper
+    function showCheckoutToast(message, type) {
+      let container = document.getElementById('toast-container');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        container.style.cssText = 'position:fixed;top:80px;right:20px;z-index:100000;display:flex;flex-direction:column;gap:8px;pointer-events:none;';
+        document.body.appendChild(container);
+      }
+      const toast = document.createElement('div');
+      const icon = type === 'error' ? '⚠️' : '✅';
+      const borderColor = type === 'error' ? '#e74c3c' : '#16A34A';
+      toast.innerHTML = `<span style="margin-right:8px;font-size:18px;">${icon}</span><span>${message}</span>`;
+      toast.style.cssText = `display:flex;align-items:center;background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;padding:14px 22px;border-radius:12px;font-size:14px;font-weight:500;box-shadow:0 8px 32px rgba(0,0,0,0.25);pointer-events:auto;transform:translateX(120%);transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275),opacity 0.3s ease;opacity:0;border-left:4px solid ${borderColor};max-width:320px;`;
+      container.appendChild(toast);
+      requestAnimationFrame(() => { toast.style.transform = 'translateX(0)'; toast.style.opacity = '1'; });
+      setTimeout(() => { toast.style.transform = 'translateX(120%)'; toast.style.opacity = '0'; setTimeout(() => toast.remove(), 400); }, 3000);
+    }
+
+    // Init
+    document.addEventListener('DOMContentLoaded', renderOrderSummary);
+  </script>
+</body>
+</html>
