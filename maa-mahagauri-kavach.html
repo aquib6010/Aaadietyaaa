@@ -51,19 +51,17 @@
 
   <!-- ANNOUNCEMENT BAR -->
   <div class="announcement-bar"><div class="announcement-text">
-    <span>🌟 Free Consultation on orders above ₹2,100 | Use Code: ASTRO21 🌟</span>
-    <span>📿 Certified Gemstones & Rudraksha — Lab Tested & Energized 📿</span>
+    <span>🌟 Consultation charges Rs 4100 onwards, strictly on appointment basis 🌟</span>
+    <span>🎉 Navaratri Offer on all Products, Order fast 🎉</span>
   </div></div>
 
   <!-- HEADER -->
   <header class="header" id="header">
     <div class="container">
-      <a href="index.html" class="logo"><div class="logo-text"><span class="a-letter">A</span>AADIETYA<span class="dot-com">.com</span></div></a>
+      <a href="index.html" class="logo"><div class="logo-text"><span class="a-letter">Aaa</span>DIETYA<span class="dot-com">.com</span></div></a>
       <div class="search-bar">
         <input type="text" placeholder="Search gemstones, rudraksha, yantras..." id="search-input">
-        <button class="search-btn" aria-label="Search">🔍</button>
-      </div>
-      <div class="header-actions">
+        <button class="search-btn" aria-label="Search">🔍</button></div><div class="header-actions">
         <a href="#" class="header-action" id="cart-btn"><span class="action-icon">🛒</span><span class="action-label">Cart</span><span class="cart-badge">0</span></a>
       </div>
     </div>
@@ -104,8 +102,8 @@
         <div class="detail-info-area">
           <h1 class="detail-title">Maa Mahagauri Ka Kavach</h1>
           <p class="detail-subtitle">Eighth form of Navdurga</p>
-          <div class="detail-rating">★★★★☆ <span>(55 Reviews)</span></div>
-          <div class="detail-price-box"><span class="detail-price-new">?9,999</span> <span style="background:#e74c3c;color:#fff;padding:4px 12px;border-radius:4px;font-size:14px;font-weight:600;margin-left:10px;">?? Navaratri Sale</span></div>
+          <div class="detail-rating">★★★★★ <span>(55 Reviews)</span></div>
+          <div class="detail-price-box"><span class="detail-price-new">₹9,999</span> <span style="background:#e74c3c;color:#fff;padding:4px 12px;border-radius:4px;font-size:14px;font-weight:600;margin-left:10px;">🎉 Navaratri Sale</span></div>
           <div class="detail-options">
             <div class="option-group">
               <label>Energization</label>
@@ -115,11 +113,11 @@
           <div class="detail-quantity">
             <label>Quantity:</label>
             <div class="qty-controls">
-              <button class="qty-btn" onclick="changeQty(-1)">−</button>
+              <button class="qty-btn" onclick="changeQty(-1)">-</button>
               <input type="number" value="1" min="1" id="qty-input" class="qty-input">
               <button class="qty-btn" onclick="changeQty(1)">+</button>
             </div>
-            <span class="total-amount">Total: <strong>?9,999</strong></span>
+            <span class="total-amount">Total: <strong>₹9,999</strong></span>
           </div>
           <div class="detail-actions">
             <a href="raksha-kavach.html" class="btn-continue">Continue Shopping</a>
@@ -150,14 +148,14 @@
         <div class="benefits">
           <h3>Benefits</h3>
           <ul class="benefits-list">
-            <li>🏠 Resolves domestic conflicts and family quarrels (Ghar kalah se pareshan)</li>
-            <li>🏘️ Protection from troublesome neighbors (Padosi se tang)</li>
-            <li>🤝 Fixes strained business partnerships (Business partner se man mutav)</li>
-            <li>🛡️ Eighth Navdurga — purifies relationships and environment</li>
-            <li>✨ Governs planet Rahu — removes Rahu Dosh effects</li>
-            <li>☮️ Brings peace, harmony and calmness in household</li>
-            <li>🙏 Maa Mahagauri symbolizes purity and serenity</li>
-            <li>🌟 Ideal for those facing daily conflicts and stress</li>
+            <li>✨ Resolves domestic conflicts and family quarrels (Ghar kalah se pareshan)</li>
+            <li>🔮 Protection from troublesome neighbors (Padosi se tang)</li>
+            <li>✨ Fixes strained business partnerships (Business partner se man mutav)</li>
+            <li>🔮 Eighth Navdurga � purifies relationships and environment</li>
+            <li>✨ Governs planet Rahu � removes Rahu Dosh effects</li>
+            <li>✨ Brings peace, harmony and calmness in household</li>
+            <li>✨ Maa Mahagauri symbolizes purity and serenity</li>
+            <li>✨ Ideal for those facing daily conflicts and stress</li>
           </ul>
         </div>
       </div>
@@ -171,7 +169,7 @@
         <div class="footer-col">
           <div class="footer-logo">
             <div class="logo-text">
-              <span class="a-letter">A</span>AADIETYA
+              <span class="a-letter">Aaa</span>DIETYA
               <span class="dot-com">.com</span>
             </div>
           </div>
@@ -221,7 +219,7 @@
       let val = parseInt(input.value) + delta;
       if (val < 1) val = 1;
       input.value = val;
-      document.querySelector('.total-amount strong').textContent = '?' + (9999 * val).toLocaleString('en-IN');
+      document.querySelector('.total-amount strong').textContent = '₹' + (9999 * val).toLocaleString('en-IN');
     }
     function addToCart() { const qty = parseInt(document.getElementById('qty-input').value) || 1; addToCartGlobal('Maa Mahagauri Ka Kavach', 9999, qty, 'images/maa-mahagauri-kavach.jpg'); }
   </script>

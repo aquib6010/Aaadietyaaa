@@ -149,4 +149,45 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // ==================== Navaratri Sale Badge on Product Detail Pages ====================
+  const mainImage = document.querySelector('.detail-image-area .main-image');
+  if (mainImage && !mainImage.querySelector('.navaratri-badge')) {
+    const badge = document.createElement('span');
+    badge.className = 'navaratri-badge';
+    badge.innerHTML = '🎉 Navaratri Sale';
+    badge.style.cssText = 'position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;padding:6px 14px;border-radius:6px;font-size:13px;font-weight:700;z-index:10;box-shadow:0 3px 12px rgba(231,76,60,0.3);';
+    mainImage.style.position = 'relative';
+    mainImage.appendChild(badge);
+  }
+
+  // ==================== Special Navaratri Benefits Text ====================
+  const detailActions = document.querySelector('.detail-actions');
+  if (detailActions && !document.querySelector('.navaratri-benefits-notice')) {
+    const notice = document.createElement('div');
+    notice.className = 'navaratri-benefits-notice';
+    notice.innerHTML = '🎉 <strong>Special benefits if purchased during Navaratri</strong> — Enhanced spiritual energy & divine blessings!';
+    notice.style.cssText = 'background:linear-gradient(135deg,#fff3e0,#ffe0b2);border:2px solid #f38321;border-radius:10px;padding:12px 18px;margin-top:16px;font-size:14px;color:#e65100;text-align:center;animation:pulse 2s ease-in-out infinite;';
+    detailActions.insertAdjacentElement('afterend', notice);
+
+    // Add pulse animation
+    if (!document.querySelector('#navaratri-pulse-style')) {
+      const style = document.createElement('style');
+      style.id = 'navaratri-pulse-style';
+      style.textContent = '@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(243,131,33,0.3)}50%{box-shadow:0 0 0 8px rgba(243,131,33,0)}}';
+      document.head.appendChild(style);
+    }
+  }
+
+  // ==================== Navaratri Sale Badge on Listing Pages ====================
+  document.querySelectorAll('.listing-product-img').forEach(imgDiv => {
+    if (!imgDiv.querySelector('.discount-badge')) {
+      const badge = document.createElement('span');
+      badge.className = 'discount-badge';
+      badge.innerHTML = '🎉 Navaratri Sale';
+      badge.style.cssText = 'background:linear-gradient(135deg,#e74c3c,#c0392b);';
+      imgDiv.style.position = 'relative';
+      imgDiv.appendChild(badge);
+    }
+  });
+
 });
