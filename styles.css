@@ -101,10 +101,10 @@ img { max-width: 100%; height: auto; display: block; }
 
 .logo-text .a-letter {
   color: var(--primary);
-  font-size: 36px;
-  font-weight: 800;
-  font-style: italic;
-  margin-right: -2px;
+  font-size: 26px;
+  font-weight: 700;
+  font-style: normal;
+  margin-right: 0px;
 }
 
 .logo-text .dot-com {
