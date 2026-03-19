@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
  <meta charset="UTF-8">
@@ -39,7 +39,7 @@
  "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "150" },
  "offers": {
  "@type": "Offer",
- "price": "9999",
+ "price": "12500",
  "priceCurrency": "INR",
  "availability": "https://schema.org/InStock",
  "seller": { "@type": "Organization", "name": "AAADIETYA.com" }
@@ -103,7 +103,7 @@
  <h1 class="detail-title">Ram Tantra Kavach</h1>
  <p class="detail-subtitle">For followers of Ramji & Vishnuji</p>
  <div class="detail-rating">★★★★★ <span>(87 Reviews)</span></div>
- <div class="detail-price-box"><span class="detail-price-new">₹9,999</span> <span style="background:#e74c3c;color:#fff;padding:4px 12px;border-radius:4px;font-size:14px;font-weight:600;margin-left:10px;">🎉 Navaratri Sale</span></div>
+ <div class="detail-price-box"><span class="detail-price-new">₹12,500</span> <span style="background:#e74c3c;color:#fff;padding:4px 12px;border-radius:4px;font-size:14px;font-weight:600;margin-left:10px;">🎉 Navaratri Sale</span></div>
  <div class="detail-options">
  <div class="option-group">
  <label>Energization</label>
@@ -117,7 +117,7 @@
  <input type="number" value="1" min="1" id="qty-input" class="qty-input">
  <button class="qty-btn" onclick="changeQty(1)">+</button>
  </div>
- <span class="total-amount">Total: <strong>₹9,999</strong></span>
+ <span class="total-amount">Total: <strong>₹12,500</strong></span>
  </div>
  <div class="detail-actions">
  <a href="raksha-kavach.html" class="btn-continue">Continue Shopping</a>
@@ -219,9 +219,9 @@
  let val = parseInt(input.value) + delta;
  if (val < 1) val = 1;
  input.value = val;
- document.querySelector('.total-amount strong').textContent = '₹' + (9999 * val).toLocaleString('en-IN');
+ document.querySelector('.total-amount strong').textContent = '₹' + (12500 * val).toLocaleString('en-IN');
  }
- function addToCart() { const qty = parseInt(document.getElementById('qty-input').value) || 1; addToCartGlobal('Ram Tantra Kavach', 9999, qty, 'images/k11.jpg'); }
+ function addToCart() { const qty = parseInt(document.getElementById('qty-input').value) || 1; addToCartGlobal('Ram Tantra Kavach', 12500, qty, 'images/k11.jpg'); }
  </script>
 </body>
 </html>
