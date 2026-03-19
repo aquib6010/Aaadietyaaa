@@ -45,6 +45,48 @@
  "serviceType": "Astrology Consultation"
  }
  </script>
+ <style>
+ .consult-progress { display:flex; justify-content:center; align-items:center; margin-bottom:2rem; gap:0; }
+ .consult-prog-step { display:flex; align-items:center; gap:10px; padding:10px 20px; }
+ .consult-prog-num { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px; transition:all .3s; }
+ .consult-prog-num.active { background:linear-gradient(135deg,#E8570E,#FF8C42); color:#fff; box-shadow:0 3px 15px rgba(232,87,14,0.3); }
+ .consult-prog-num.inactive { background:#ddd; color:#888; }
+ .consult-prog-num.completed { background:#16A34A; color:#fff; }
+ .consult-prog-label { font-size:14px; font-weight:600; transition:color .3s; }
+ .consult-prog-label.active { color:#1a1a2e; }
+ .consult-prog-label.inactive { color:#888; }
+ .consult-prog-label.completed { color:#16A34A; }
+ .consult-connector { width:60px; height:3px; background:#ddd; border-radius:3px; transition:background .3s; }
+ .consult-connector.active { background:#16A34A; }
+
+ .plan-card { display:flex; align-items:center; gap:16px; padding:20px; border:2px solid #e8e8e8; border-radius:14px; cursor:pointer; transition:all .3s; background:#fafafa; }
+ .plan-card:hover { border-color:#E8570E; background:#fff8f5; transform:translateY(-2px); box-shadow:0 4px 15px rgba(232,87,14,0.1); }
+ .plan-card.selected { border-color:#E8570E; background:#fff8f5; box-shadow:0 4px 20px rgba(232,87,14,0.15); }
+ .plan-radio-outer { width:24px; height:24px; border-radius:50%; border:3px solid #ddd; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all .3s; }
+ .plan-card.selected .plan-radio-outer { border-color:#E8570E; }
+ .plan-radio-inner { width:12px; height:12px; border-radius:50%; background:transparent; transition:all .3s; }
+ .plan-card.selected .plan-radio-inner { background:#E8570E; }
+ .plan-info { flex:1; }
+ .plan-title { font-size:17px; font-weight:700; color:#1a1a2e; }
+ .plan-desc { font-size:13px; color:#888; margin-top:4px; }
+ .plan-price { font-size:20px; font-weight:800; color:#E8570E; white-space:nowrap; }
+
+ .btn-consult-next { padding:14px 40px; background:linear-gradient(135deg,#E8570E,#FF8C42); color:#fff; border:none; border-radius:10px; font-size:16px; font-weight:700; cursor:pointer; font-family:inherit; box-shadow:0 4px 15px rgba(232,87,14,0.3); transition:all .3s; }
+ .btn-consult-next:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(232,87,14,0.4); }
+ .btn-consult-back { padding:14px 28px; border:2px solid #ddd; background:#fff; color:#555; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer; font-family:inherit; transition:all .3s; }
+ .btn-consult-back:hover { border-color:#999; color:#333; }
+ .btn-consult-submit { padding:14px 40px; background:linear-gradient(135deg,#16A34A,#22c55e); color:#fff; border:none; border-radius:10px; font-size:16px; font-weight:700; cursor:pointer; font-family:inherit; box-shadow:0 4px 15px rgba(22,163,74,0.3); transition:all .3s; }
+ .btn-consult-submit:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 6px 20px rgba(22,163,74,0.4); }
+ .btn-consult-submit:disabled { opacity:0.5; cursor:not-allowed; }
+ .btn-consult-submit.submitting { pointer-events:none; }
+ .btn-consult-submit.submitting::after { content:''; width:18px; height:18px; border:3px solid rgba(255,255,255,0.3); border-top-color:#fff; border-radius:50%; animation:cspin 0.6s linear infinite; display:inline-block; margin-left:10px; vertical-align:middle; }
+ @keyframes cspin { to { transform:rotate(360deg); } }
+
+ @media (max-width:600px) {
+  .plan-card { flex-wrap:wrap; gap:10px; }
+  .plan-price { width:100%; text-align:right; }
+ }
+ </style>
 </head>
 <body>
 
@@ -136,18 +178,34 @@
   </div>
  </section>
 
- <!-- CONSULTATION FORM -->
+ <!-- CONSULTATION BOOKING FLOW -->
  <section class="consultation-section">
  <div class="container">
+
+ <!-- Progress Indicator -->
+ <div class="consult-progress">
+  <div class="consult-prog-step">
+   <span class="consult-prog-num active" id="cprog-1-num">1</span>
+   <span class="consult-prog-label active" id="cprog-1-label">Your Details</span>
+  </div>
+  <div class="consult-connector" id="cconn-1"></div>
+  <div class="consult-prog-step">
+   <span class="consult-prog-num inactive" id="cprog-2-num">2</span>
+   <span class="consult-prog-label inactive" id="cprog-2-label">Choose Plan</span>
+  </div>
+ </div>
+
  <div class="consultation-layout">
 
- <!-- LEFT: Form -->
+ <!-- LEFT: Steps -->
  <div class="consultation-form-area">
- <div class="form-card">
+
+ <!-- ===== STEP 1: Details Form ===== -->
+ <div id="consult-step-1" class="form-card">
  <h2>📋 Share Your Details</h2>
  <p class="form-subtitle">All fields are required for accurate horoscope analysis</p>
 
- <form id="consultation-form">
+ <form id="consultation-form" onsubmit="return false;">
  <div class="form-group">
  <label for="full-name">Full Name <span class="required">*</span></label>
  <input type="text" id="full-name" name="fullName" placeholder="Enter your full name" required>
@@ -179,16 +237,59 @@
  <textarea id="concern" name="concern" rows="4" placeholder="Describe your concern — career, health, marriage, finance, etc."></textarea>
  </div>
 
- <div class="form-actions-row">
- <button type="button" class="btn-whatsapp" onclick="sendViaWhatsApp()">
- <span>💬</span> Send via WhatsApp
- </button>
- <button type="button" class="btn-email" onclick="sendViaEmail()">
- <span>✉️</span> Send via Email
+ <div class="form-actions-row" style="justify-content:flex-end;">
+ <button type="button" class="btn-consult-next" onclick="goToChoosePlan()">
+  Next →
  </button>
  </div>
  </form>
  </div>
+
+ <!-- ===== STEP 2: Choose Plan ===== -->
+ <div id="consult-step-2" class="form-card" style="display:none;">
+ <h2>🎯 Choose Your Consultation Plan</h2>
+ <p class="form-subtitle">Select a session that suits your needs</p>
+
+ <div style="display:flex;flex-direction:column;gap:16px;margin:24px 0;">
+
+  <!-- Plan 1: 10 min -->
+  <div class="plan-card" onclick="selectPlan(1)" id="plan-card-1">
+   <div class="plan-radio-outer"><div class="plan-radio-inner"></div></div>
+   <div class="plan-info">
+    <div class="plan-title">⏱️ 10 Minutes Session</div>
+    <div class="plan-desc">1 Question</div>
+   </div>
+   <div class="plan-price">₹27,100</div>
+  </div>
+
+  <!-- Plan 2: 30 min -->
+  <div class="plan-card" onclick="selectPlan(2)" id="plan-card-2">
+   <div class="plan-radio-outer"><div class="plan-radio-inner"></div></div>
+   <div class="plan-info">
+    <div class="plan-title">⏱️ 30 Minutes Session</div>
+    <div class="plan-desc">Up to 3 Questions</div>
+   </div>
+   <div class="plan-price">₹81,100</div>
+  </div>
+
+  <!-- Plan 3: 60 min -->
+  <div class="plan-card" onclick="selectPlan(3)" id="plan-card-3">
+   <div class="plan-radio-outer"><div class="plan-radio-inner"></div></div>
+   <div class="plan-info">
+    <div class="plan-title">⏱️ 60 Minutes Session</div>
+    <div class="plan-desc">Up to 6 Questions</div>
+   </div>
+   <div class="plan-price">₹1,51,100</div>
+  </div>
+
+ </div>
+
+ <div style="display:flex;justify-content:space-between;gap:12px;margin-top:8px;">
+  <button type="button" class="btn-consult-back" onclick="goBackToDetails()">← Back</button>
+  <button type="button" class="btn-consult-submit" id="btn-submit-consultation" onclick="submitConsultation()" disabled>Submit & Proceed to Payment ✓</button>
+ </div>
+ </div>
+
  </div>
 
  <!-- RIGHT: Info -->
@@ -198,10 +299,10 @@
  <ul class="info-list">
  <li>✅ First ISO 9001:2015 Certified Astrologer-Numerologist</li>
  <li>✅ 35+ years of experience in Vedic Astrology</li>
- <li>✅ Accurate Kundali analysis & predictions</li>
+ <li>✅ Accurate Kundali analysis &amp; predictions</li>
  <li>✅ Personalized remedies for your specific problems</li>
- <li>✅ Confidential & private consultations</li>
- <li>✅ Available in Hindi & English</li>
+ <li>✅ Confidential &amp; private consultations</li>
+ <li>✅ Available in Hindi &amp; English</li>
  </ul>
  </div>
 
@@ -239,7 +340,7 @@
  <span class="dot-com">.com</span>
  </div>
  </div>
- <p class="footer-about">An ISO 9001:2015 Certified Company providing world-class astrological consultation, genuine spiritual products & transformative guidance since 2001.</p>
+ <p class="footer-about">An ISO 9001:2015 Certified Company providing world-class astrological consultation, genuine spiritual products &amp; transformative guidance since 2001.</p>
  <div class="footer-contact">
  <p>📍 Shop No. 12, Radiance Town, 7/119 Swaroop Nagar, Kanpur - 208002</p>
  <p>📞 <a href="tel:+919839117339" style="color:#ccc;">+91 983 911 7339</a></p>
@@ -280,70 +381,206 @@
  <script src="cart.js"></script>
  <script src="script.js"></script>
  <script>
- function validateForm() {
- const name = document.getElementById('full-name').value.trim();
- const dob = document.getElementById('dob').value;
- const tob = document.getElementById('tob').value;
- const pob = document.getElementById('pob').value.trim();
- const phone = document.getElementById('phone').value.trim();
-
- if (!name || !dob || !tob || !pob || !phone) {
- alert('Please fill in all required fields: Name, Date of Birth, Time of Birth, Place of Birth, and Phone number.');
- return null;
- }
- 
- const concern = document.getElementById('concern').value.trim();
-
- // Format date nicely
- const dateObj = new Date(dob + 'T00:00:00');
- const formattedDate = dateObj.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
-
- // Format time to 12-hour
- const [h, m] = tob.split(':');
- const hour12 = ((+h % 12) || 12);
- const ampm = +h >= 12 ? 'PM' : 'AM';
- const formattedTime = hour12 + ':' + m + ' ' + ampm;
-
- return {
- name, dob: formattedDate, tob: formattedTime, pob, phone, concern
+ // ==================== Consultation Plans ====================
+ const PLANS = {
+  1: { name: 'Live Consultation - 10 Minutes (1 Question)', duration: '10 min', questions: '1 Question', price: 27100 },
+  2: { name: 'Live Consultation - 30 Minutes (Up to 3 Questions)', duration: '30 min', questions: 'Up to 3 Questions', price: 81100 },
+  3: { name: 'Live Consultation - 60 Minutes (Up to 6 Questions)', duration: '60 min', questions: 'Up to 6 Questions', price: 151100 }
  };
+
+ let selectedPlan = null;
+
+ // ==================== Step Navigation ====================
+ function goToChoosePlan() {
+  // Validate form
+  const name = document.getElementById('full-name').value.trim();
+  const dob = document.getElementById('dob').value;
+  const tob = document.getElementById('tob').value;
+  const pob = document.getElementById('pob').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+
+  let valid = true;
+  const fields = [
+   { id: 'full-name', val: name },
+   { id: 'dob', val: dob },
+   { id: 'tob', val: tob },
+   { id: 'pob', val: pob },
+   { id: 'phone', val: phone }
+  ];
+
+  fields.forEach(f => {
+   const el = document.getElementById(f.id);
+   if (!f.val) {
+    el.style.borderColor = '#e74c3c';
+    el.style.boxShadow = '0 0 0 3px rgba(231,76,60,0.1)';
+    valid = false;
+   } else {
+    el.style.borderColor = '';
+    el.style.boxShadow = '';
+   }
+  });
+
+  if (!valid) {
+   showToast('Please fill in all required fields.', 'error');
+   return;
+  }
+
+  // Show step 2
+  document.getElementById('consult-step-1').style.display = 'none';
+  document.getElementById('consult-step-2').style.display = 'block';
+  updateConsultProgress(2);
+  window.scrollTo({ top: document.querySelector('.consultation-section').offsetTop - 20, behavior: 'smooth' });
  }
 
- function sendViaWhatsApp() {
- const data = validateForm();
- if (!data) return;
-
- let msg = `🔮 *Astrology Consultation Request*\n\n`;
- msg += `👤 *Name:* ${data.name}\n`;
- msg += `📅 *Date of Birth:* ${data.dob}\n`;
- msg += `🕐 *Time of Birth:* ${data.tob}\n`;
- msg += `📍 *Place of Birth:* ${data.pob}\n`;
- msg += `📱 *Phone:* ${data.phone}\n`;
- if (data.concern) {
- msg += `\n💭 *Concern:*\n${data.concern}`;
+ function goBackToDetails() {
+  document.getElementById('consult-step-2').style.display = 'none';
+  document.getElementById('consult-step-1').style.display = 'block';
+  updateConsultProgress(1);
+  window.scrollTo({ top: document.querySelector('.consultation-section').offsetTop - 20, behavior: 'smooth' });
  }
 
- const encoded = encodeURIComponent(msg);
- window.open(`https://wa.me/919839117339?text=${encoded}`, '_blank');
+ function updateConsultProgress(step) {
+  const num1 = document.getElementById('cprog-1-num');
+  const label1 = document.getElementById('cprog-1-label');
+  const num2 = document.getElementById('cprog-2-num');
+  const label2 = document.getElementById('cprog-2-label');
+  const conn = document.getElementById('cconn-1');
+
+  if (step === 1) {
+   num1.className = 'consult-prog-num active';
+   label1.className = 'consult-prog-label active';
+   num2.className = 'consult-prog-num inactive';
+   label2.className = 'consult-prog-label inactive';
+   conn.className = 'consult-connector';
+  } else {
+   num1.className = 'consult-prog-num completed';
+   num1.textContent = '✓';
+   label1.className = 'consult-prog-label completed';
+   num2.className = 'consult-prog-num active';
+   label2.className = 'consult-prog-label active';
+   conn.className = 'consult-connector active';
+  }
  }
 
- function sendViaEmail() {
- const data = validateForm();
- if (!data) return;
+ // ==================== Plan Selection ====================
+ function selectPlan(planId) {
+  selectedPlan = planId;
 
- const subject = encodeURIComponent(`Astrology Consultation Request - ${data.name}`);
- let body = `Astrology Consultation Request\n\n`;
- body += `Name: ${data.name}\n`;
- body += `Date of Birth: ${data.dob}\n`;
- body += `Time of Birth: ${data.tob}\n`;
- body += `Place of Birth: ${data.pob}\n`;
- body += `Phone: ${data.phone}\n`;
- if (data.concern) {
- body += `\nConcern:\n${data.concern}`;
+  // Update UI
+  document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('plan-card-' + planId).classList.add('selected');
+
+  // Enable submit button
+  const btn = document.getElementById('btn-submit-consultation');
+  btn.disabled = false;
+  btn.style.opacity = '1';
  }
 
- const encodedBody = encodeURIComponent(body);
- window.open(`mailto:dr.aaadietya@gmail.com?subject=${subject}&body=${encodedBody}`, '_blank');
+ // ==================== Submit Consultation ====================
+ async function submitConsultation() {
+  if (!selectedPlan) {
+   showToast('Please select a consultation plan.', 'error');
+   return;
+  }
+
+  const btn = document.getElementById('btn-submit-consultation');
+  btn.classList.add('submitting');
+  btn.textContent = 'Submitting...';
+  btn.disabled = true;
+
+  const plan = PLANS[selectedPlan];
+
+  // Gather user details
+  const name = document.getElementById('full-name').value.trim();
+  const dob = document.getElementById('dob').value;
+  const tob = document.getElementById('tob').value;
+  const pob = document.getElementById('pob').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const concern = document.getElementById('concern').value.trim();
+
+  // Format date
+  const dateObj = new Date(dob + 'T00:00:00');
+  const formattedDate = dateObj.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  // Format time
+  const [h, m] = tob.split(':');
+  const hour12 = ((+h % 12) || 12);
+  const ampm = +h >= 12 ? 'PM' : 'AM';
+  const formattedTime = hour12 + ':' + m + ' ' + ampm;
+
+  // Send email via FormSubmit.co
+  const formData = new FormData();
+  formData.append('_subject', '🔮 Consultation Booking - ' + name + ' - ' + plan.name);
+  formData.append('_template', 'table');
+  formData.append('_captcha', 'false');
+  formData.append('Booking Type', 'Live Consultation');
+  formData.append('Plan', plan.name);
+  formData.append('Amount', '₹' + plan.price.toLocaleString('en-IN'));
+  formData.append('Customer Name', name);
+  formData.append('Date of Birth', formattedDate);
+  formData.append('Time of Birth', formattedTime);
+  formData.append('Place of Birth', pob);
+  formData.append('Phone', phone);
+  formData.append('Concern', concern || 'Not specified');
+
+  try {
+   const response = await fetch('https://formsubmit.co/ajax/anmoladitya2019@gmail.com', {
+    method: 'POST',
+    body: formData
+   });
+   const result = await response.json();
+   if (!result.success) throw new Error('Email failed');
+  } catch(err) {
+   console.error('FormSubmit error:', err);
+   // Fallback: send via WhatsApp
+   const waMsg = encodeURIComponent(
+    `🔮 *Consultation Booking*\n\n` +
+    `*Plan:* ${plan.name}\n` +
+    `*Amount:* ₹${plan.price.toLocaleString('en-IN')}\n\n` +
+    `👤 *Name:* ${name}\n` +
+    `📅 *DOB:* ${formattedDate}\n` +
+    `🕐 *TOB:* ${formattedTime}\n` +
+    `📍 *POB:* ${pob}\n` +
+    `📱 *Phone:* ${phone}\n` +
+    (concern ? `\n💭 *Concern:*\n${concern}` : '')
+   );
+   window.open(`https://wa.me/919839117339?text=${waMsg}`, '_blank');
+  }
+
+  // Add consultation as cart item and redirect to checkout
+  // Clear existing cart for clean consultation checkout
+  const consultCart = [{
+   name: plan.name,
+   price: plan.price,
+   qty: 1,
+   image: 'images/head3.png'
+  }];
+  localStorage.setItem('aaadietya_cart', JSON.stringify(consultCart));
+
+  // Flag for checkout to skip details and go directly to payment
+  localStorage.setItem('aaadietya_consultation_booking', 'true');
+
+  // Redirect to checkout
+  window.location.href = 'checkout.html';
+ }
+
+ // ==================== Toast Helper ====================
+ function showToast(message, type) {
+  let container = document.getElementById('toast-container');
+  if (!container) {
+   container = document.createElement('div');
+   container.id = 'toast-container';
+   container.style.cssText = 'position:fixed;top:80px;right:20px;z-index:100000;display:flex;flex-direction:column;gap:8px;pointer-events:none;';
+   document.body.appendChild(container);
+  }
+  const toast = document.createElement('div');
+  const icon = type === 'error' ? '❌' : '✅';
+  const borderColor = type === 'error' ? '#e74c3c' : '#16A34A';
+  toast.innerHTML = `<span style="margin-right:8px;font-size:18px;">${icon}</span><span>${message}</span>`;
+  toast.style.cssText = `display:flex;align-items:center;background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;padding:14px 22px;border-radius:12px;font-size:14px;font-weight:500;box-shadow:0 8px 32px rgba(0,0,0,0.25);pointer-events:auto;transform:translateX(120%);transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275),opacity 0.3s ease;opacity:0;border-left:4px solid ${borderColor};max-width:320px;`;
+  container.appendChild(toast);
+  requestAnimationFrame(() => { toast.style.transform = 'translateX(0)'; toast.style.opacity = '1'; });
+  setTimeout(() => { toast.style.transform = 'translateX(120%)'; toast.style.opacity = '0'; setTimeout(() => toast.remove(), 400); }, 3000);
  }
  </script>
 </body>

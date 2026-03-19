@@ -769,7 +769,18 @@
  }
 
  // Init
- document.addEventListener('DOMContentLoaded', renderOrderSummary);
+ document.addEventListener('DOMContentLoaded', function() {
+  renderOrderSummary();
+
+  // If coming from consultation booking, skip details and go straight to payment
+  if (localStorage.getItem('aaadietya_consultation_booking') === 'true') {
+   localStorage.removeItem('aaadietya_consultation_booking');
+   // Auto-advance to payment step
+   document.getElementById('step-1').classList.remove('active');
+   document.getElementById('step-2').classList.add('active');
+   updateProgress(2);
+  }
+ });
  </script>
 </body>
 </html>
