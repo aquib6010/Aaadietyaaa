@@ -772,10 +772,11 @@
  document.addEventListener('DOMContentLoaded', function() {
   renderOrderSummary();
 
-  // If coming from consultation booking, skip details and go straight to payment
-  if (localStorage.getItem('aaadietya_consultation_booking') === 'true') {
+  // If cart contains a consultation booking, skip details and go straight to payment
+  const cart = getCart();
+  const isConsultation = cart.some(item => item.name && item.name.startsWith('Live Consultation'));
+  if (isConsultation) {
    localStorage.removeItem('aaadietya_consultation_booking');
-   // Auto-advance to payment step
    document.getElementById('step-1').classList.remove('active');
    document.getElementById('step-2').classList.add('active');
    updateProgress(2);
