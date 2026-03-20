@@ -9,12 +9,11 @@
  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔮</text></svg>">
 
  <!-- SEO Meta Tags -->
- <meta name="keywords" content="astrology consultation, vedic astrology consultation online, horoscope reading, kundli analysis, astrology, vedic astrology, rudraksha, numerology, vastu shastra, Dr Aaadietya Pandey">
+ <meta name="keywords" content="astrology consultation, vedic astrology consultation online, horoscope reading, kundli analysis, numerology, palmistry, vastu shastra, signature analysis, Dr Aaadietya Pandey">
  <meta name="author" content="Dr. Aaadietya Pandey - AAADIETYA.com">
  <meta name="robots" content="index, follow">
  <link rel="canonical" href="https://aaadietya.com/consultation.html">
 
- <!-- Open Graph / Facebook -->
  <meta property="og:type" content="website">
  <meta property="og:url" content="https://aaadietya.com/consultation.html">
  <meta property="og:title" content="Consultation - Book Your Astrology Session | AAADIETYA.com">
@@ -23,7 +22,6 @@
  <meta property="og:site_name" content="AAADIETYA.com">
  <meta property="og:locale" content="en_IN">
 
- <!-- Twitter Card -->
  <meta name="twitter:card" content="summary_large_image">
  <meta name="twitter:title" content="Consultation - Book Your Astrology Session | AAADIETYA.com">
  <meta name="twitter:description" content="Book a Vedic Astrology Consultation with AAADIETYA. Share your birth details and get accurate predictions and powerful remedies.">
@@ -46,7 +44,7 @@
  }
  </script>
  <style>
- .consult-progress { display:flex; justify-content:center; align-items:center; margin-bottom:2rem; gap:0; }
+ .consult-progress { display:flex; justify-content:center; align-items:center; margin-bottom:2rem; gap:0; flex-wrap:wrap; }
  .consult-prog-step { display:flex; align-items:center; gap:10px; padding:10px 20px; }
  .consult-prog-num { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px; transition:all .3s; }
  .consult-prog-num.active { background:linear-gradient(135deg,#E8570E,#FF8C42); color:#fff; box-shadow:0 3px 15px rgba(232,87,14,0.3); }
@@ -58,6 +56,26 @@
  .consult-prog-label.completed { color:#16A34A; }
  .consult-connector { width:60px; height:3px; background:#ddd; border-radius:3px; transition:background .3s; }
  .consult-connector.active { background:#16A34A; }
+
+ /* Consultation type selector */
+ .ctype-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:12px; margin:20px 0; }
+ .ctype-card { display:flex; flex-direction:column; align-items:center; gap:8px; padding:18px 12px; border:2px solid #e8e8e8; border-radius:14px; cursor:pointer; transition:all .3s; background:#fafafa; text-align:center; }
+ .ctype-card:hover { border-color:#E8570E; background:#fff8f5; transform:translateY(-2px); box-shadow:0 4px 15px rgba(232,87,14,0.1); }
+ .ctype-card.selected { border-color:#E8570E; background:#fff8f5; box-shadow:0 4px 20px rgba(232,87,14,0.15); }
+ .ctype-icon { font-size:32px; }
+ .ctype-name { font-size:14px; font-weight:700; color:#1a1a2e; }
+
+ /* Dynamic fields */
+ .dynamic-fields { display:none; margin-top:20px; animation:fadeInUp 0.3s ease; }
+ .dynamic-fields.visible { display:block; }
+ @keyframes fadeInUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+ /* Upload area */
+ .upload-area { border:2px dashed #ccc; border-radius:14px; padding:30px; text-align:center; cursor:pointer; transition:all .3s; background:#fafafa; }
+ .upload-area:hover { border-color:#E8570E; background:#fff8f5; }
+ .upload-area.has-file { border-color:#16A34A; background:#f0fdf4; }
+ .upload-area input[type="file"] { display:none; }
+ .upload-preview { max-width:200px; max-height:200px; margin-top:12px; border-radius:10px; }
 
  .plan-card { display:flex; align-items:center; gap:16px; padding:20px; border:2px solid #e8e8e8; border-radius:14px; cursor:pointer; transition:all .3s; background:#fafafa; }
  .plan-card:hover { border-color:#E8570E; background:#fff8f5; transform:translateY(-2px); box-shadow:0 4px 15px rgba(232,87,14,0.1); }
@@ -85,6 +103,7 @@
  @media (max-width:600px) {
   .plan-card { flex-wrap:wrap; gap:10px; }
   .plan-price { width:100%; text-align:right; }
+  .ctype-grid { grid-template-columns:repeat(2, 1fr); }
  }
  </style>
 </head>
@@ -136,7 +155,7 @@
  <img src="images/head3.png" alt="Consultation - Aaadietya.com" class="hero-front-img">
  </section>
 
-  <!-- LIVE CONSULTATION PRICING TABLE -->
+ <!-- LIVE CONSULTATION PRICING TABLE -->
  <section style="padding:40px 20px;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);">
   <div style="max-width:900px;margin:0 auto;text-align:center;">
    <h2 style="font-size:28px;font-weight:800;color:#fbbf24;margin:0 0 6px;">🎥 Online LIVE Consultation</h2>
@@ -197,41 +216,161 @@
  <!-- ===== STEP 1: Details Form ===== -->
  <div id="consult-step-1" class="form-card">
  <h2>📋 Share Your Details</h2>
- <p class="form-subtitle">All fields are required for accurate horoscope analysis</p>
+ <p class="form-subtitle">Enter your name, then choose your consultation type</p>
 
  <form id="consultation-form" onsubmit="return false;">
+
+ <!-- Full Name (always visible) -->
  <div class="form-group">
  <label for="full-name">Full Name <span class="required">*</span></label>
  <input type="text" id="full-name" name="fullName" placeholder="Enter your full name" required>
  </div>
 
+ <!-- Consultation Type Selector -->
+ <div class="form-group">
+ <label>Choose Consultation Type <span class="required">*</span></label>
+ <div class="ctype-grid">
+  <div class="ctype-card" onclick="selectConsultType('vedic')" id="ctype-vedic">
+   <img src="images/vedic.jpeg" alt="Vedic Astrology" style="width:60px;height:60px;border-radius:50%;object-fit:cover;">
+   <span class="ctype-name">Vedic Astrology</span>
+  </div>
+  <div class="ctype-card" onclick="selectConsultType('numerology')" id="ctype-numerology">
+   <img src="images/numerology.jpeg" alt="Numerology" style="width:60px;height:60px;border-radius:50%;object-fit:cover;">
+   <span class="ctype-name">Numerology</span>
+  </div>
+  <div class="ctype-card" onclick="selectConsultType('palmistry')" id="ctype-palmistry">
+   <img src="images/palmistry.jpeg" alt="Palmistry" style="width:60px;height:60px;border-radius:50%;object-fit:cover;">
+   <span class="ctype-name">Palmistry</span>
+  </div>
+  <div class="ctype-card" onclick="selectConsultType('signature')" id="ctype-signature">
+   <img src="images/signatureanalysis.jpeg" alt="Signature Analysis" style="width:60px;height:60px;border-radius:50%;object-fit:cover;">
+   <span class="ctype-name">Signature Analysis</span>
+  </div>
+  <div class="ctype-card" onclick="selectConsultType('vastu')" id="ctype-vastu">
+   <img src="images/vastushastra.webp" alt="Vastu Shastra" style="width:60px;height:60px;border-radius:50%;object-fit:cover;">
+   <span class="ctype-name">Vastu Shastra</span>
+  </div>
+ </div>
+ </div>
+
+ <!-- ====== DYNAMIC FIELDS PER TYPE ====== -->
+
+ <!-- VEDIC ASTROLOGY Fields -->
+ <div id="fields-vedic" class="dynamic-fields">
  <div class="form-row">
- <div class="form-group">
- <label for="dob">Date of Birth <span class="required">*</span></label>
- <input type="date" id="dob" name="dateOfBirth" required>
+  <div class="form-group">
+  <label for="dob">Date of Birth <span class="required">*</span></label>
+  <input type="date" id="dob" name="dateOfBirth">
+  </div>
+  <div class="form-group">
+  <label for="tob">Time of Birth <span class="required">*</span></label>
+  <input type="time" id="tob" name="timeOfBirth">
+  </div>
  </div>
  <div class="form-group">
- <label for="tob">Time of Birth <span class="required">*</span></label>
- <input type="time" id="tob" name="timeOfBirth" required>
+  <label for="pob">Place of Birth (City + Place) <span class="required">*</span></label>
+  <input type="text" id="pob" name="placeOfBirth" placeholder="e.g. Varanasi, Uttar Pradesh">
+ </div>
+ <div class="form-group">
+  <label for="phone-vedic">Phone / WhatsApp Number <span class="required">*</span></label>
+  <input type="tel" id="phone-vedic" name="phone" placeholder="+91 XXXXX XXXXX">
+ </div>
+ <div class="form-group">
+  <label for="concern-vedic">Your Concern / Question <span class="optional">(Optional)</span></label>
+  <textarea id="concern-vedic" name="concern" rows="3" placeholder="Describe your concern — career, health, marriage, finance, etc."></textarea>
  </div>
  </div>
 
+ <!-- NUMEROLOGY Fields -->
+ <div id="fields-numerology" class="dynamic-fields">
  <div class="form-group">
- <label for="pob">Place of Birth (City + Place) <span class="required">*</span></label>
- <input type="text" id="pob" name="placeOfBirth" placeholder="e.g. Varanasi, Uttar Pradesh" required>
+  <label for="dob-num">Date of Birth <span class="required">*</span></label>
+  <input type="date" id="dob-num" name="dateOfBirth">
+ </div>
+ <div class="form-group">
+  <label for="phone-num">Phone / WhatsApp Number <span class="required">*</span></label>
+  <input type="tel" id="phone-num" name="phone" placeholder="+91 XXXXX XXXXX">
+ </div>
+ <div class="form-group">
+  <label for="concern-num">Your Concern / Question <span class="optional">(Optional)</span></label>
+  <textarea id="concern-num" name="concern" rows="3" placeholder="Describe your concern..."></textarea>
+ </div>
  </div>
 
+ <!-- PALMISTRY Fields -->
+ <div id="fields-palmistry" class="dynamic-fields">
  <div class="form-group">
- <label for="phone">Phone / WhatsApp Number <span class="required">*</span></label>
- <input type="tel" id="phone" name="phone" placeholder="+91 XXXXX XXXXX" required>
+  <label>Upload Palm Image <span class="required">*</span></label>
+  <div class="upload-area" id="upload-palm" onclick="document.getElementById('palm-file').click();">
+   <input type="file" id="palm-file" accept="image/*" onchange="handleUpload(this, 'palm')">
+   <div id="palm-placeholder">
+    <span style="font-size:40px;">🤚</span>
+    <p style="color:#888;margin:8px 0 0;font-size:14px;">Click to upload palm image</p>
+    <p style="color:#bbb;font-size:12px;">JPG, PNG or WebP</p>
+   </div>
+   <img id="palm-preview" class="upload-preview" style="display:none;">
+  </div>
+ </div>
+ <div class="form-group">
+  <label for="phone-palm">Phone / WhatsApp Number <span class="required">*</span></label>
+  <input type="tel" id="phone-palm" name="phone" placeholder="+91 XXXXX XXXXX">
+ </div>
+ <div class="form-group">
+  <label for="concern-palm">Your Concern / Question <span class="optional">(Optional)</span></label>
+  <textarea id="concern-palm" name="concern" rows="3" placeholder="Describe your concern..."></textarea>
+ </div>
  </div>
 
+ <!-- SIGNATURE ANALYSIS Fields -->
+ <div id="fields-signature" class="dynamic-fields">
  <div class="form-group">
- <label for="concern">Your Concern / Question <span class="optional">(Optional)</span></label>
- <textarea id="concern" name="concern" rows="4" placeholder="Describe your concern — career, health, marriage, finance, etc."></textarea>
+  <label>Upload Signature Image <span class="required">*</span></label>
+  <div class="upload-area" id="upload-signature" onclick="document.getElementById('signature-file').click();">
+   <input type="file" id="signature-file" accept="image/*" onchange="handleUpload(this, 'signature')">
+   <div id="signature-placeholder">
+    <span style="font-size:40px;">✍️</span>
+    <p style="color:#888;margin:8px 0 0;font-size:14px;">Click to upload signature image</p>
+    <p style="color:#bbb;font-size:12px;">JPG, PNG or WebP</p>
+   </div>
+   <img id="signature-preview" class="upload-preview" style="display:none;">
+  </div>
+ </div>
+ <div class="form-group">
+  <label for="phone-sig">Phone / WhatsApp Number <span class="required">*</span></label>
+  <input type="tel" id="phone-sig" name="phone" placeholder="+91 XXXXX XXXXX">
+ </div>
+ <div class="form-group">
+  <label for="concern-sig">Your Concern / Question <span class="optional">(Optional)</span></label>
+  <textarea id="concern-sig" name="concern" rows="3" placeholder="Describe your concern..."></textarea>
+ </div>
  </div>
 
- <div class="form-actions-row" style="justify-content:flex-end;">
+ <!-- VASTU SHASTRA Fields -->
+ <div id="fields-vastu" class="dynamic-fields">
+ <div class="form-group">
+  <label>Upload Vastu Map Image <span class="required">*</span></label>
+  <div class="upload-area" id="upload-vastu" onclick="document.getElementById('vastu-file').click();">
+   <input type="file" id="vastu-file" accept="image/*" onchange="handleUpload(this, 'vastu')">
+   <div id="vastu-placeholder">
+    <span style="font-size:40px;">🏠</span>
+    <p style="color:#888;margin:8px 0 0;font-size:14px;">Click to upload vastu map image</p>
+    <p style="color:#bbb;font-size:12px;">JPG, PNG or WebP</p>
+   </div>
+   <img id="vastu-preview" class="upload-preview" style="display:none;">
+  </div>
+ </div>
+ <div class="form-group">
+  <label for="phone-vastu">Phone / WhatsApp Number <span class="required">*</span></label>
+  <input type="tel" id="phone-vastu" name="phone" placeholder="+91 XXXXX XXXXX">
+ </div>
+ <div class="form-group">
+  <label for="concern-vastu">Your Concern / Question <span class="optional">(Optional)</span></label>
+  <textarea id="concern-vastu" name="concern" rows="3" placeholder="Describe your concern..."></textarea>
+ </div>
+ </div>
+
+ <!-- Next Button (hidden until type selected) -->
+ <div class="form-actions-row" style="justify-content:flex-end;display:none;" id="next-btn-row">
  <button type="button" class="btn-consult-next" onclick="goToChoosePlan()">
   Next →
  </button>
@@ -245,8 +384,6 @@
  <p class="form-subtitle">Select a session that suits your needs</p>
 
  <div style="display:flex;flex-direction:column;gap:16px;margin:24px 0;">
-
-  <!-- Plan 1: 10 min -->
   <div class="plan-card" onclick="selectPlan(1)" id="plan-card-1">
    <div class="plan-radio-outer"><div class="plan-radio-inner"></div></div>
    <div class="plan-info">
@@ -255,8 +392,6 @@
    </div>
    <div class="plan-price">₹27,100</div>
   </div>
-
-  <!-- Plan 2: 30 min -->
   <div class="plan-card" onclick="selectPlan(2)" id="plan-card-2">
    <div class="plan-radio-outer"><div class="plan-radio-inner"></div></div>
    <div class="plan-info">
@@ -265,8 +400,6 @@
    </div>
    <div class="plan-price">₹81,100</div>
   </div>
-
-  <!-- Plan 3: 60 min -->
   <div class="plan-card" onclick="selectPlan(3)" id="plan-card-3">
    <div class="plan-radio-outer"><div class="plan-radio-inner"></div></div>
    <div class="plan-info">
@@ -275,7 +408,6 @@
    </div>
    <div class="plan-price">₹1,51,100</div>
   </div>
-
  </div>
 
  <div style="display:flex;justify-content:space-between;gap:12px;margin-top:8px;">
@@ -328,16 +460,10 @@
  <div class="container">
  <div class="footer-grid">
  <div class="footer-col">
- <div class="footer-logo">
- <div class="logo-text">
- <span class="a-letter">Aaa</span>DIETYA
- <span class="dot-com">.com</span>
- </div>
- </div>
+ <div class="footer-logo"><div class="logo-text"><span class="a-letter">Aaa</span>DIETYA<span class="dot-com">.com</span></div></div>
  <p class="footer-about">An ISO 9001:2015 Certified Company providing world-class astrological consultation, genuine spiritual products &amp; transformative guidance since 2001.</p>
  <div class="footer-contact">
- <p>📍 Shop No. 12, Radiance Town, 7/119 Swaroop Nagar, Kanpur - 208002</p>
- <p>📞 <a href="tel:+919839117339" style="color:#ccc;">+91 983 911 7339</a></p>
+<p>📍 Kanpur | Lucknow | Prayagraj | Gurugram</p> <p>📞 <a href="tel:+919839117339" style="color:#ccc;">+91 983 911 7339</a></p>
  <p>📱 <a href="tel:+919336344500" style="color:#ccc;">+91 933 634 4500</a></p>
  <p>✉️ <a href="mailto:astrojyotishi@gmail.com" style="color:#ccc;">astrojyotishi@gmail.com</a></p>
  </div>
@@ -375,48 +501,98 @@
  <script src="cart.js"></script>
  <script src="script.js"></script>
  <script>
- // ==================== Consultation Plans ====================
+ // ==================== Consultation Config ====================
+ const CONSULTATION_TYPES = {
+  vedic: { label: 'Vedic Astrology', icon: '🔮', fields: 'fields-vedic' },
+  numerology: { label: 'Numerology', icon: '🔢', fields: 'fields-numerology' },
+  palmistry: { label: 'Palmistry', icon: '🤚', fields: 'fields-palmistry' },
+  signature: { label: 'Signature Analysis', icon: '✍️', fields: 'fields-signature' },
+  vastu: { label: 'Vastu Shastra', icon: '🏠', fields: 'fields-vastu' }
+ };
+
  const PLANS = {
   1: { name: 'Live Consultation - 10 Minutes (1 Question)', duration: '10 min', questions: '1 Question', price: 27100 },
   2: { name: 'Live Consultation - 30 Minutes (Up to 3 Questions)', duration: '30 min', questions: 'Up to 3 Questions', price: 81100 },
   3: { name: 'Live Consultation - 60 Minutes (Up to 6 Questions)', duration: '60 min', questions: 'Up to 6 Questions', price: 151100 }
  };
 
+ let selectedType = null;
  let selectedPlan = null;
+ let uploadedFiles = { palm: null, signature: null, vastu: null };
+
+ // ==================== Consultation Type Selection ====================
+ function selectConsultType(type) {
+  selectedType = type;
+
+  // Highlight selected card
+  document.querySelectorAll('.ctype-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('ctype-' + type).classList.add('selected');
+
+  // Show/hide dynamic fields
+  document.querySelectorAll('.dynamic-fields').forEach(f => f.classList.remove('visible'));
+  document.getElementById(CONSULTATION_TYPES[type].fields).classList.add('visible');
+
+  // Show Next button
+  document.getElementById('next-btn-row').style.display = 'flex';
+
+  // Smooth scroll to fields
+  setTimeout(() => {
+   document.getElementById(CONSULTATION_TYPES[type].fields).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 100);
+ }
+
+ // ==================== File Upload ====================
+ function handleUpload(input, type) {
+  const file = input.files[0];
+  if (!file) return;
+
+  uploadedFiles[type] = file;
+
+  // Show preview
+  const reader = new FileReader();
+  reader.onload = function(e) {
+   const preview = document.getElementById(type + '-preview');
+   preview.src = e.target.result;
+   preview.style.display = 'block';
+   document.getElementById(type + '-placeholder').style.display = 'none';
+   document.getElementById('upload-' + type).classList.add('has-file');
+  };
+  reader.readAsDataURL(file);
+ }
 
  // ==================== Step Navigation ====================
  function goToChoosePlan() {
-  // Validate form
   const name = document.getElementById('full-name').value.trim();
-  const dob = document.getElementById('dob').value;
-  const tob = document.getElementById('tob').value;
-  const pob = document.getElementById('pob').value.trim();
-  const phone = document.getElementById('phone').value.trim();
+  if (!name) { showToast('Please enter your full name.', 'error'); highlightField('full-name'); return; }
+  if (!selectedType) { showToast('Please select a consultation type.', 'error'); return; }
 
-  let valid = true;
-  const fields = [
-   { id: 'full-name', val: name },
-   { id: 'dob', val: dob },
-   { id: 'tob', val: tob },
-   { id: 'pob', val: pob },
-   { id: 'phone', val: phone }
-  ];
-
-  fields.forEach(f => {
-   const el = document.getElementById(f.id);
-   if (!f.val) {
-    el.style.borderColor = '#e74c3c';
-    el.style.boxShadow = '0 0 0 3px rgba(231,76,60,0.1)';
-    valid = false;
-   } else {
-    el.style.borderColor = '';
-    el.style.boxShadow = '';
-   }
-  });
-
-  if (!valid) {
-   showToast('Please fill in all required fields.', 'error');
-   return;
+  // Validate type-specific fields
+  if (selectedType === 'vedic') {
+   const dob = document.getElementById('dob').value;
+   const tob = document.getElementById('tob').value;
+   const pob = document.getElementById('pob').value.trim();
+   const phone = document.getElementById('phone-vedic').value.trim();
+   if (!dob) { showToast('Please enter date of birth.', 'error'); highlightField('dob'); return; }
+   if (!tob) { showToast('Please enter time of birth.', 'error'); highlightField('tob'); return; }
+   if (!pob) { showToast('Please enter place of birth.', 'error'); highlightField('pob'); return; }
+   if (!phone) { showToast('Please enter phone number.', 'error'); highlightField('phone-vedic'); return; }
+  } else if (selectedType === 'numerology') {
+   const dob = document.getElementById('dob-num').value;
+   const phone = document.getElementById('phone-num').value.trim();
+   if (!dob) { showToast('Please enter date of birth.', 'error'); highlightField('dob-num'); return; }
+   if (!phone) { showToast('Please enter phone number.', 'error'); highlightField('phone-num'); return; }
+  } else if (selectedType === 'palmistry') {
+   if (!uploadedFiles.palm) { showToast('Please upload your palm image.', 'error'); return; }
+   const phone = document.getElementById('phone-palm').value.trim();
+   if (!phone) { showToast('Please enter phone number.', 'error'); highlightField('phone-palm'); return; }
+  } else if (selectedType === 'signature') {
+   if (!uploadedFiles.signature) { showToast('Please upload your signature image.', 'error'); return; }
+   const phone = document.getElementById('phone-sig').value.trim();
+   if (!phone) { showToast('Please enter phone number.', 'error'); highlightField('phone-sig'); return; }
+  } else if (selectedType === 'vastu') {
+   if (!uploadedFiles.vastu) { showToast('Please upload vastu map image.', 'error'); return; }
+   const phone = document.getElementById('phone-vastu').value.trim();
+   if (!phone) { showToast('Please enter phone number.', 'error'); highlightField('phone-vastu'); return; }
   }
 
   // Show step 2
@@ -424,6 +600,13 @@
   document.getElementById('consult-step-2').style.display = 'block';
   updateConsultProgress(2);
   window.scrollTo({ top: document.querySelector('.consultation-section').offsetTop - 20, behavior: 'smooth' });
+ }
+
+ function highlightField(id) {
+  const el = document.getElementById(id);
+  if (el) { el.style.borderColor = '#e74c3c'; el.style.boxShadow = '0 0 0 3px rgba(231,76,60,0.1)'; el.focus();
+   el.addEventListener('input', function handler() { el.style.borderColor = ''; el.style.boxShadow = ''; el.removeEventListener('input', handler); });
+  }
  }
 
  function goBackToDetails() {
@@ -439,19 +622,14 @@
   const num2 = document.getElementById('cprog-2-num');
   const label2 = document.getElementById('cprog-2-label');
   const conn = document.getElementById('cconn-1');
-
   if (step === 1) {
-   num1.className = 'consult-prog-num active';
-   label1.className = 'consult-prog-label active';
-   num2.className = 'consult-prog-num inactive';
-   label2.className = 'consult-prog-label inactive';
+   num1.className = 'consult-prog-num active'; label1.className = 'consult-prog-label active';
+   num2.className = 'consult-prog-num inactive'; label2.className = 'consult-prog-label inactive';
    conn.className = 'consult-connector';
   } else {
-   num1.className = 'consult-prog-num completed';
-   num1.textContent = '✓';
+   num1.className = 'consult-prog-num completed'; num1.textContent = '✓';
    label1.className = 'consult-prog-label completed';
-   num2.className = 'consult-prog-num active';
-   label2.className = 'consult-prog-label active';
+   num2.className = 'consult-prog-num active'; label2.className = 'consult-prog-label active';
    conn.className = 'consult-connector active';
   }
  }
@@ -459,63 +637,82 @@
  // ==================== Plan Selection ====================
  function selectPlan(planId) {
   selectedPlan = planId;
-
-  // Update UI
   document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
   document.getElementById('plan-card-' + planId).classList.add('selected');
-
-  // Enable submit button
   const btn = document.getElementById('btn-submit-consultation');
-  btn.disabled = false;
-  btn.style.opacity = '1';
+  btn.disabled = false; btn.style.opacity = '1';
+ }
+
+ // ==================== Gather Details by Type ====================
+ function gatherDetails() {
+  const name = document.getElementById('full-name').value.trim();
+  const typeLabel = CONSULTATION_TYPES[selectedType].label;
+  let details = { name, type: typeLabel, phone: '', extras: {} };
+
+  if (selectedType === 'vedic') {
+   const dob = document.getElementById('dob').value;
+   const tob = document.getElementById('tob').value;
+   const dateObj = new Date(dob + 'T00:00:00');
+   const formattedDate = dateObj.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+   const [h, m] = tob.split(':');
+   const hour12 = ((+h % 12) || 12);
+   const ampm = +h >= 12 ? 'PM' : 'AM';
+   details.phone = document.getElementById('phone-vedic').value.trim();
+   details.extras = {
+    'Date of Birth': formattedDate,
+    'Time of Birth': hour12 + ':' + m + ' ' + ampm,
+    'Place of Birth': document.getElementById('pob').value.trim(),
+    'Concern': document.getElementById('concern-vedic').value.trim() || 'Not specified'
+   };
+  } else if (selectedType === 'numerology') {
+   const dob = document.getElementById('dob-num').value;
+   const dateObj = new Date(dob + 'T00:00:00');
+   const formattedDate = dateObj.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+   details.phone = document.getElementById('phone-num').value.trim();
+   details.extras = {
+    'Date of Birth': formattedDate,
+    'Concern': document.getElementById('concern-num').value.trim() || 'Not specified'
+   };
+  } else if (selectedType === 'palmistry') {
+   details.phone = document.getElementById('phone-palm').value.trim();
+   details.extras = { 'Image': 'Palm image uploaded (attached via WhatsApp)', 'Concern': document.getElementById('concern-palm').value.trim() || 'Not specified' };
+  } else if (selectedType === 'signature') {
+   details.phone = document.getElementById('phone-sig').value.trim();
+   details.extras = { 'Image': 'Signature image uploaded (attached via WhatsApp)', 'Concern': document.getElementById('concern-sig').value.trim() || 'Not specified' };
+  } else if (selectedType === 'vastu') {
+   details.phone = document.getElementById('phone-vastu').value.trim();
+   details.extras = { 'Image': 'Vastu map image uploaded (attached via WhatsApp)', 'Concern': document.getElementById('concern-vastu').value.trim() || 'Not specified' };
+  }
+  return details;
  }
 
  // ==================== Submit Consultation ====================
  async function submitConsultation() {
-  if (!selectedPlan) {
-   showToast('Please select a consultation plan.', 'error');
-   return;
-  }
+  if (!selectedPlan) { showToast('Please select a consultation plan.', 'error'); return; }
 
   const btn = document.getElementById('btn-submit-consultation');
-  btn.classList.add('submitting');
-  btn.textContent = 'Submitting...';
-  btn.disabled = true;
+  btn.classList.add('submitting'); btn.textContent = 'Submitting...'; btn.disabled = true;
 
   const plan = PLANS[selectedPlan];
-
-  // Gather user details
-  const name = document.getElementById('full-name').value.trim();
-  const dob = document.getElementById('dob').value;
-  const tob = document.getElementById('tob').value;
-  const pob = document.getElementById('pob').value.trim();
-  const phone = document.getElementById('phone').value.trim();
-  const concern = document.getElementById('concern').value.trim();
-
-  // Format date
-  const dateObj = new Date(dob + 'T00:00:00');
-  const formattedDate = dateObj.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
-
-  // Format time
-  const [h, m] = tob.split(':');
-  const hour12 = ((+h % 12) || 12);
-  const ampm = +h >= 12 ? 'PM' : 'AM';
-  const formattedTime = hour12 + ':' + m + ' ' + ampm;
+  const details = gatherDetails();
 
   // Send email via FormSubmit.co
   const formData = new FormData();
-  formData.append('_subject', '🔮 Consultation Booking - ' + name + ' - ' + plan.name);
+  formData.append('_subject', '🔮 Consultation Booking - ' + details.name + ' - ' + details.type);
   formData.append('_template', 'table');
   formData.append('_captcha', 'false');
-  formData.append('Booking Type', 'Live Consultation');
+  formData.append('Consultation Type', details.type);
   formData.append('Plan', plan.name);
   formData.append('Amount', '₹' + plan.price.toLocaleString('en-IN'));
-  formData.append('Customer Name', name);
-  formData.append('Date of Birth', formattedDate);
-  formData.append('Time of Birth', formattedTime);
-  formData.append('Place of Birth', pob);
-  formData.append('Phone', phone);
-  formData.append('Concern', concern || 'Not specified');
+  formData.append('Customer Name', details.name);
+  formData.append('Phone', details.phone);
+  Object.entries(details.extras).forEach(([key, val]) => formData.append(key, val));
+
+  // Attach uploaded image if any
+  const uploadType = selectedType === 'palmistry' ? 'palm' : selectedType === 'signature' ? 'signature' : selectedType === 'vastu' ? 'vastu' : null;
+  if (uploadType && uploadedFiles[uploadType]) {
+   formData.append('attachment', uploadedFiles[uploadType]);
+  }
 
   try {
    const response = await fetch('https://formsubmit.co/ajax/anmoladitya2019@gmail.com', {
@@ -527,34 +724,20 @@
   } catch(err) {
    console.error('FormSubmit error:', err);
    // Fallback: send via WhatsApp
-   const waMsg = encodeURIComponent(
-    `🔮 *Consultation Booking*\n\n` +
-    `*Plan:* ${plan.name}\n` +
-    `*Amount:* ₹${plan.price.toLocaleString('en-IN')}\n\n` +
-    `👤 *Name:* ${name}\n` +
-    `📅 *DOB:* ${formattedDate}\n` +
-    `🕐 *TOB:* ${formattedTime}\n` +
-    `📍 *POB:* ${pob}\n` +
-    `📱 *Phone:* ${phone}\n` +
-    (concern ? `\n💭 *Concern:*\n${concern}` : '')
-   );
-   window.open(`https://wa.me/919839117339?text=${waMsg}`, '_blank');
+   let waMsg = `🔮 *Consultation Booking*\n\n*Type:* ${details.type}\n*Plan:* ${plan.name}\n*Amount:* ₹${plan.price.toLocaleString('en-IN')}\n\n👤 *Name:* ${details.name}\n📱 *Phone:* ${details.phone}\n`;
+   Object.entries(details.extras).forEach(([key, val]) => { waMsg += `*${key}:* ${val}\n`; });
+   window.open(`https://wa.me/919839117339?text=${encodeURIComponent(waMsg)}`, '_blank');
   }
 
-  // Add consultation as cart item and redirect to checkout
-  // Clear existing cart for clean consultation checkout
+  // Add to cart and redirect
   const consultCart = [{
-   name: plan.name,
+   name: details.type + ' - ' + plan.name,
    price: plan.price,
    qty: 1,
    image: 'images/head3.png'
   }];
   localStorage.setItem('aaadietya_cart', JSON.stringify(consultCart));
-
-  // Flag for checkout to skip details and go directly to payment
   localStorage.setItem('aaadietya_consultation_booking', 'true');
-
-  // Redirect to checkout
   window.location.href = 'checkout.html';
  }
 

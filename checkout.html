@@ -287,96 +287,7 @@
  <!-- UPI App Buttons -->
  <div style="margin-bottom:28px;">
   <h3 style="font-size:16px;color:#1a1a2e;margin:0 0 16px;text-align:center;">Pay Instantly via UPI App</h3>
-  <p style="font-size:13px;color:#888;text-align:center;margin:0 0 16px;">Clicking a button will open the app with the exact amount pre-filled</p>
-  <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;">
-   <button onclick="payWithUPI('gpay')" style="flex:1;min-width:140px;max-width:200px;padding:14px 8px;background:linear-gradient(135deg,#4285F4,#34A853);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 15px rgba(66,133,244,0.3);transition:all .3s;">
-    <span style="font-size:20px;">G</span> Google Pay
-   </button>
-   <button onclick="payWithUPI('phonepe')" style="flex:1;min-width:140px;max-width:200px;padding:14px 8px;background:linear-gradient(135deg,#5F259F,#8B5CF6);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 15px rgba(95,37,159,0.3);transition:all .3s;">
-    <span style="font-size:20px;">P</span> PhonePe
-   </button>
-   <button onclick="payWithUPI('paytm')" style="flex:1;min-width:140px;max-width:200px;padding:14px 8px;background:linear-gradient(135deg,#00B9F5,#002970);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 15px rgba(0,185,245,0.3);transition:all .3s;">
-    <span style="font-size:20px;">₹</span> Paytm
-   </button>
-   <button onclick="payWithUPI('any')" style="flex:1;min-width:140px;max-width:200px;padding:14px 8px;background:linear-gradient(135deg,#E8570E,#FF8C42);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 15px rgba(232,87,14,0.3);transition:all .3s;">
-    <span style="font-size:20px;">📱</span> Any UPI App
-   </button>
-  </div>
- </div>
-
- <div style="text-align:center;color:#aaa;font-size:13px;margin:0 0 20px;">— OR scan QR code with exact amount —</div>
-
- <!-- Dynamic QR Code (amount locked) -->
- <div class="qr-wrapper">
-  <img id="qr-image" alt="UPI Payment QR Code" style="max-width:250px;border-radius:12px;border:2px solid #eee;">
-  <div class="qr-label">Scan to Pay — amount is pre-filled</div>
-  <button onclick="downloadQR()" style="margin-top:10px;padding:10px 24px;background:linear-gradient(135deg,#E8570E,#FF8C42);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">⬇️ Download QR Code</button>
- </div>
-
-
- </div>
-
- <!-- Screenshot Upload -->
- <div class="upload-section">
- <h3>📤 Upload Payment Screenshot</h3>
- <p style="font-size:13px;color:#888;margin:0 0 12px;">After making the payment, take a screenshot and upload it below as proof of payment.</p>
- <div class="upload-area" id="upload-area">
- <div class="upload-icon">📤</div>
- <div class="upload-text">Click or drag to upload screenshot</div>
- <div class="upload-hint">Supports JPG, PNG, JPEG (Max 5MB)</div>
- <input type="file" id="screenshot-input" accept="image/*">
- </div>
- <div class="upload-preview" id="upload-preview">
- <img id="preview-img" alt="Payment screenshot preview">
- <div class="upload-filename" id="upload-filename"></div>
- </div>
- </div>
-
- <div class="checkout-actions">
- <button class="btn-back" onclick="goToStep1()">Back to Details</button>
- <button class="btn-next" id="btn-place-order" onclick="placeOrder()" disabled>Place Order & Submit Payment Proof ?</button>
- </div>
- </div>
- </div>
- </div>
-
- <!-- ===== STEP 3: Success ===== -->
- <div class="checkout-step" id="step-3">
- <div class="checkout-card">
- <div class="checkout-card-body">
- <div class="success-section">
- <div class="success-icon">✅</div>
- <h2 class="success-title">Congratulations!</h2>
- <p class="success-subtitle">Your order has been placed successfully!<br>We have received your payment screenshot and will verify it shortly.</p>
- <div class="success-order-id">
- <span>Order ID</span>
- <strong id="order-id-display">AAD-000000</strong>
- </div>
- <p style="font-size:14px;color:#888;margin-bottom:24px;">A confirmation will be sent to your email. For any queries, contact us at<br><strong>+91-9839117339</strong> or <strong>dr.aaadietya@gmail.com</strong></p>
- <a href="index.html" class="btn-continue-shopping">🛒 Continue Shopping</a>
- </div>
- </div>
- </div>
- </div>
-
- </div>
- </section>
-
- <!-- FOOTER -->
- <footer class="footer" id="footer">
- <div class="container">
- <div class="footer-grid">
- <div class="footer-col">
- <div class="footer-logo">
- <div class="logo-text">
- <span class="a-letter">Aaa</span>DIETYA
- <span class="dot-com">.com</span>
- </div>
- </div>
- <p class="footer-about">An ISO 9001:2015 Certified Company providing world-class astrological consultation, genuine spiritual products & transformative guidance since 2001.</p>
- <div class="footer-contact">
- <p>📍 Shop No. 12, Radiance Town, 7/119 Swaroop Nagar, Kanpur - 208002</p>
- <p>📞 <a href="tel:+919839117339" style="color:#ccc;">+91 983 911 7339</a></p>
+  <p>📍 Kanpur | Lucknow | Prayagraj | Gurugram</p> <p>📞 <a href="tel:+919839117339" style="color:#ccc;">+91 983 911 7339</a></p>
  <p>📱 <a href="tel:+919336344500" style="color:#ccc;">+91 933 634 4500</a></p>
  <p>✉️ <a href="mailto:astrojyotishi@gmail.com" style="color:#ccc;">astrojyotishi@gmail.com</a></p>
  </div>
@@ -773,7 +684,10 @@
 
   // If cart contains a consultation booking, skip details and go straight to payment
   const cart = getCart();
-  const isConsultation = cart.some(item => item.name && item.name.startsWith('Live Consultation'));
+  const consultFlag = localStorage.getItem('aaadietya_consultation_booking') === 'true';
+  const isConsultation = consultFlag || cart.some(function(item) {
+   return item.name && (item.name.indexOf('Live Consultation') !== -1 || item.name.indexOf('Vedic Astrology') !== -1 || item.name.indexOf('Numerology') !== -1 || item.name.indexOf('Palmistry') !== -1 || item.name.indexOf('Signature Analysis') !== -1 || item.name.indexOf('Vastu Shastra') !== -1);
+  });
   if (isConsultation) {
    localStorage.removeItem('aaadietya_consultation_booking');
    document.getElementById('step-1').classList.remove('active');
