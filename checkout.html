@@ -773,7 +773,17 @@
 
   // If cart contains a consultation booking, skip details and go straight to payment
   const cart = getCart();
-  const isConsultation = cart.some(item => item.name && item.name.startsWith('Live Consultation'));
+  const consultFlag = localStorage.getItem('aaadietya_consultation_booking') === 'true';
+   const isConsultation = consultFlag || cart.some(function(item) {
+    return item.name && (
+     item.name.indexOf('Live Consultation') !== -1 ||
+     item.name.indexOf('Vedic Astrology') !== -1 ||
+     item.name.indexOf('Numerology') !== -1 ||
+     item.name.indexOf('Palmistry') !== -1 ||
+     item.name.indexOf('Signature Analysis') !== -1 ||
+     item.name.indexOf('Vastu Shastra') !== -1
+    );
+   });
   if (isConsultation) {
    localStorage.removeItem('aaadietya_consultation_booking');
    document.getElementById('step-1').classList.remove('active');
